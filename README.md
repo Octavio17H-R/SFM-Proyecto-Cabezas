@@ -1,5 +1,5 @@
 <p align="center">
-<img src="img/FON.png" alt="Proyecto SFM" width="80px">
+<img src="/SFM Proyecto/img/FON.png" alt="Proyecto SFM" width="80px">
 </p>
 
 <h1 align="center">
