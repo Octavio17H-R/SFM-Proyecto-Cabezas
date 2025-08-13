@@ -68,7 +68,7 @@ Editar
 
 1. Clonar este repositorio:
    ```bash
-   git clone https://github.com/octaviohernandez/SFM Poryecto.git
+   git clone https://github.com/Octavio17H-R/SFM-Proyecto.git
 Colocar los reportes Excel en la carpeta /assets/Archivos/.
 
 Abrir index.html en el navegador.
