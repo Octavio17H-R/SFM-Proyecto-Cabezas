@@ -3,11 +3,11 @@
 </p>
 
 <h1 align="center">
-   Proyecto Web SFM & OEE - Fundición Volkswagen de México
+   Proyecto Web SFM - Fundición Volkswagen de México
 </h1>
 
 <p align="center">
-   Dashboard web responsivo desarrollado en HTML5, Bootstrap 5 y JavaScript para el seguimiento de indicadores <b>SFM</b> (Seguridad, Fallas, Mantenimiento) y <b>OEE</b> (Overall Equipment Effectiveness) en el área de Fundición de Volkswagen de México.
+   Dashboard web responsivo desarrollado en HTML5, Bootstrap 5 y JavaScript para el seguimiento de indicadores <b>SFM</b> (shopfloor management) y <b>OEE</b> (Overall Equipment Effectiveness) en el área de Fundición de Volkswagen de México.
 </p>
 
 ![GitHub](https://img.shields.io/github/license/octaviohernandez/proyecto-sfm-oee) ![GitHub issues](https://img.shields.io/github/issues/octaviohernandez/proyecto-sfm-oee) ![GitHub closed issues](https://img.shields.io/github/issues-closed/octaviohernandez/proyecto-sfm-oee)
@@ -103,6 +103,6 @@ No está autorizado su uso o distribución fuera de la organización sin permiso
 ✍️ Autor
 Octavio Hernández
 Desarrollador Frontend & Analista de Datos
-📧 contacto@correo.com
+📧 octavio.her1707@gmail.com
 
 💡 Nota: Este proyecto fue desarrollado inicialmente sobre la plantilla Sneat Bootstrap 5 HTML Admin Template, pero ha sido completamente adaptado y personalizado para los requerimientos de la Nave 10 - Área de Fundición.
