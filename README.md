@@ -1,5 +1,5 @@
 <p align="center">
-   <img src="https://user-images.githubusercontent.com/749684/150333149-805037bc-8874-4a1f-876a-61a9683f8ef5.png" alt="Proyecto SFM" width="80px">
+<img src="img/FON.png" alt="Proyecto SFM" width="80px">
 </p>
 
 <h1 align="center">
