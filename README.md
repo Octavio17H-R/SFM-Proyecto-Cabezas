@@ -9,9 +9,6 @@
 <p align="center">
    Dashboard web responsivo desarrollado en HTML5, Bootstrap 5 y JavaScript para el seguimiento de indicadores <b>SFM</b> (shopfloor management) y <b>OEE</b> (Overall Equipment Effectiveness) en el área de Fundición de Volkswagen de México.
 </p>
-
-![GitHub](https://img.shields.io/github/license/octaviohernandez/proyecto-sfm-oee) ![GitHub issues](https://img.shields.io/github/issues/octaviohernandez/proyecto-sfm-oee) ![GitHub closed issues](https://img.shields.io/github/issues-closed/octaviohernandez/proyecto-sfm-oee)
-
 ---
 
 ## 📌 Introducción 🚀
@@ -71,7 +68,7 @@ Editar
 
 1. Clonar este repositorio:
    ```bash
-   git clone https://github.com/octaviohernandez/proyecto-sfm-oee.git
+   git clone https://github.com/octaviohernandez/SFM Poryecto.git
 Colocar los reportes Excel en la carpeta /assets/Archivos/.
 
 Abrir index.html en el navegador.
