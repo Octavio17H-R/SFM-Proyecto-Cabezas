@@ -245,5 +245,5 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('saveChangesBtn').addEventListener('click', exportToExcel);
 
   // Cargar Excel automáticamente desde ruta local dentro del proyecto
-  loadExcelFromUrl('../assets/Archivos/accidentabilidad.xlsx'); // <--- Cambia esta ruta a la ubicación real de tu Excel
+  loadExcelFromUrl('../assets/Archivos/Empleado/accidentabilidad.xlsx'); // <--- Cambia esta ruta a la ubicación real de tu Excel
 });

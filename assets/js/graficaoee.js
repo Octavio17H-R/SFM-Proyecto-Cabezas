@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-  const archivoRuta = "../assets/Archivos/oee.xlsx";
+  const archivoRuta = "../assets/Archivos/Proceso/oee.xlsx";
 
   document.getElementById('loadingMessage').style.display = 'block';
 
@@ -17,32 +17,80 @@ document.addEventListener('DOMContentLoaded', function () {
       const datosEA211 = jsonData.filter(row => row.Linea === 'EA211');
       const datosEA888 = jsonData.filter(row => row.Linea === 'EA888');
 
+      // Registrar plugin datalabels
+      if (typeof Chart !== 'undefined' && Chart.register) {
+        Chart.register(ChartDataLabels);
+      }
+
       function crearGrafico(canvasId, datos, titulo) {
         const labels = datos.map(row => row.Fecha);
-        const disponibilidad = datos.map(row => row.Disponibilidad);
-        const rendimiento = datos.map(row => row.Rendimiento);
-        const calidad = datos.map(row => row.Calidad);
-        const oee = datos.map(row => row.OEE);
+        const disponibilidad = datos.map(row => parseFloat(row.Disponibilidad) || 0);
+        const rendimiento = datos.map(row => parseFloat(row.Rendimiento) || 0);
+        const calidad = datos.map(row => parseFloat(row.Calidad) || 0);
+        const oee = datos.map(row => parseFloat(row.OEE) || 0);
 
-       new Chart(document.getElementById(canvasId).getContext('2d'), {
-          type: 'bar', // Cambiamos de 'line' a 'bar'
+        new Chart(document.getElementById(canvasId).getContext('2d'), {
+          type: 'bar',
           data: {
             labels,
-              datasets: [
-                { label: 'OEE', data: oee, backgroundColor: 'rgba(255, 99, 132, 0.8)', stack: 'Stack 1' },
-                { label: 'Disponibilidad', data: disponibilidad, backgroundColor: 'rgba(54, 162, 235, 0.8)', stack: 'Stack 1' },
-                { label: 'Rendimiento', data: rendimiento, backgroundColor: 'rgba(75, 192, 192, 0.8)', stack: 'Stack 1' },
-                { label: 'Calidad', data: calidad, backgroundColor: 'rgba(255, 159, 64, 0.8)', stack: 'Stack 1' }
-              ]
+            datasets: [
+              { label: 'OEE', data: oee, backgroundColor: 'rgba(24, 79, 228, 0.8)', stack: 'Stack 1' },
+              { label: 'Disponibilidad', data: disponibilidad, backgroundColor: 'rgba(54, 162, 235, 0.8)', stack: 'Stack 1' },
+              { label: 'Desempeño', data: rendimiento, backgroundColor: 'rgba(236, 107, 20, 0.8)', stack: 'Stack 1' },
+              { label: 'Calidad', data: calidad, backgroundColor: 'rgba(119, 235, 144, 0.66)', stack: 'Stack 1' }
+            ]
           },
           options: {
             responsive: true,
             plugins: {
-              title: { display: true, text: titulo },
+              datalabels: {
+                display: function (context) {
+                  const val = context.dataset.data[context.dataIndex] || 0;
+                  return val >= 3; // solo mostrar si el valor >= 3%
+                },
+                formatter: function (value) {
+                  if (!value && value !== 0) return '';
+                  const rounded = (Math.abs(value - Math.round(value)) >= 0.05)
+                    ? value.toFixed(1)
+                    : Math.round(value);
+                  return rounded + '%';
+                },
+                font: {
+                  weight: '600',
+                  size: 12
+                },
+                anchor: 'center',
+                align: 'center',
+                color: function (context) {
+                  const bg = context.dataset.backgroundColor;
+                  try {
+                    const m = /rgba?\((\d+),\s*(\d+),\s*(\d+)/.exec(bg);
+                    if (m) {
+                      const r = parseInt(m[1]), g = parseInt(m[2]), b = parseInt(m[3]);
+                      const lum = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+                      return lum < 140 ? 'white' : 'black';
+                    }
+                  } catch (e) {}
+                  return 'white';
+                },
+                clamp: true,
+                padding: 2
+              },
+              title: {
+                  display: true,
+                  text: titulo,
+                  font: {
+                    size: 24,       // tamaño en píxeles (ajústalo a tu gusto)
+                    //weight: 'bold'  // opcional, pone el texto en negrita
+                  },
+                  color: '#0000009f'     // opcional, color del título
+                },
+
               tooltip: {
                 callbacks: {
                   label: function (context) {
-                    return `${context.dataset.label}: ${context.parsed.y.toFixed(2)}%`;
+                    const v = context.parsed.y || 0;
+                    return `${context.dataset.label}: ${v.toFixed(2)}%`;
                   }
                 }
               },
@@ -77,12 +125,11 @@ document.addEventListener('DOMContentLoaded', function () {
               }
             }
           }
-
         });
       }
 
-      crearGrafico('graficoEA211', datosEA211, 'Rendimiento OEE - EA211');
-      crearGrafico('graficoEA888', datosEA888, 'Rendimiento OEE - EA888');
+      crearGrafico('graficoEA211', datosEA211, 'OEE - EA211');
+      crearGrafico('graficoEA888', datosEA888, 'OEE - EA888');
 
       document.getElementById('loadingMessage').style.display = 'none';
     })

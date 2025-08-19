@@ -102,7 +102,6 @@
                 <li class="menu-item"><a href="layouts-blank.html" class="menu-link"><div data-i18n="Blank">Plan de Acciones</div></a></li>
               </ul>
             </li>
-            <!-- Aquí puedes agregar más secciones del menú si lo deseas -->
           </ul>
         </aside>
         <!-- / Menu -->
@@ -163,45 +162,65 @@
                 <!-- contenedor -->
                 <div class="col-12">
                   <div class="card shadow border-primary rounded-3 main-dashboard-card" style="min-height: 640px;">
-                            <!-- CONTENIDO ----------------------------------------------------->
+                    <!-- CONTENIDO ----------------------------------------------------->
                     <div class="text-center mb-8">
-                      <span class="badge bg-primary fs-8"style="font-size:2.5rem; margin-top: 2rem; font-family: 'Public Sans', sans-serif;">
+                      <span class="badge bg-primary fs-8" style="font-size:2rem; margin-top: 2rem; font-family: 'Public Sans', sans-serif;">
                         plan de acciones
                       </span>
                     </div>
+
                     <div class="text-end" style="padding-right: 2rem;">
-                    <h5>Responsable: <span class="text-success">Javier González Parra</span></h5>
-                    <h5>Año: <span class="text-primary">2025</span></h5>
+                      <h5>Responsable: <span class="text-success">Javier González Parra</span></h5>
+                      <h5>Año: <span class="text-primary">2025</span></h5>
                     </div>
-                  <div class="card-body">
-                    <div class="row mb-4">
-                      <!-- Columna principal -->
-                      <div class="col-md-8">
-                        <div class="d-flex justify-content-between align-items-center mb-3" style="padding-left: 2rem; padding-right: 2rem;">
-                        <h5>MES: <span class="text-primary">Agosto</span></h5>
+
+                    <div class="card-body">
+                      <div class="row mb-4">
+                        <!-- Columna principal -->
+                        <div class="col-md-12">
+                          <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-3" style="padding-left: 2rem; padding-right: 2rem;">
+                            <div class="d-flex align-items-center gap-2">
+                              <h5 class="mb-0">MES:</h5>
+                              <select id="mes-select" class="form-select form-select-sm" style="max-width:220px;">
+                                <option value="Todos">Todos</option>
+                                <option>Enero</option><option>Febrero</option><option>Marzo</option>
+                                <option>Abril</option><option>Mayo</option><option>Junio</option>
+                                <option>Julio</option><option selected>Agosto</option><option>Septiembre</option>
+                                <option>Octubre</option><option>Noviembre</option><option>Diciembre</option>
+                              </select>
+                            </div>
+
+                            <div class="d-flex flex-wrap gap-2">
+                              <button id="btn-cargar"  class="btn btn-primary btn-sm">Cargar Excel</button>
+                              <button id="btn-guardar" class="btn btn-success btn-sm" disabled>Exportar Excel</button>
+                              <button id="btn-agregar" class="btn btn-outline-secondary btn-sm">Agregar fila</button>
+                              <button id="btn-limpiar" class="btn btn-outline-danger btn-sm">Limpiar tabla</button>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="table-responsive mt-2" style="padding-left: 2rem; padding-right: 2rem;">
+                          <table class="table table-bordered table-hover">
+                            <thead class="table-light">
+                              <tr>
+                                <th style="width: 20%;">MES</th>
+                                <th style="width: 15%;">PROBLEMA</th>
+                                <th style="width: 25%;">CAUSA</th>
+                                <th style="width: 20%;">MEDIDA CORRECTIVA</th>
+                                <th style="width: 20%;">ESCALAR</th>
+                                <th style="width: 20%;">RESPONSABLE</th>
+                                <th style="width: 20%;">PLAZO</th>
+                                <th style="width: 20%;">ESTATUS</th>
+                              </tr>
+                            </thead>
+                            <tbody id="monthly-data">
+                              <!-- filas se generan desde JS, celdas son contenteditable -->
+                            </tbody>
+                          </table>
                         </div>
                       </div>
-                      <div class="table-responsive mt-4">
-                      <table class="table table-bordered table-hover">
-                        <thead class="table-light">
-                          <tr>
-                            <th style="width: 20%;">MES</th>
-                            <th style="width: 15%;">PROBLEMA</th>
-                            <th style="width: 25%;">CAUSA</th>
-                            <th style="width: 20%;">MEDIDA CORRECTIVA</th>
-                            <th style="width: 20%;">ESCALAR</th>
-                            <th style="width: 20%;">RESPONSABLE</th>
-                            <th style="width: 20%;">PLAZO</th>
-                            <th style="width: 20%;">ESTATUS</th>
-                          </tr>
-                        </thead>
-                        <tbody id="monthly-data">
-                        </tbody>
-                      </table>
                     </div>
-                    </div>
-                  </div>
-                  <!--........../conten.....................-->
+                    <!--........../conten.....................-->
                   </div>
                 </div>
               </div>
@@ -224,9 +243,12 @@
       </div>
       <div class="layout-overlay layout-menu-toggle"></div>
     </div>
+
     <div class="buy-now">
-      <a href="index.html"class="btn btn-danger btn-buy-now">Regresar</a>
+      <a href="index.html" class="btn btn-danger btn-buy-now">Regresar</a>
     </div>
+
+    <!-- Scripts existentes -->
     <script src="../assets/vendor/libs/jquery/jquery.js"></script>
     <script src="../assets/vendor/libs/popper/popper.js"></script>
     <script src="../assets/vendor/js/bootstrap.js"></script>
@@ -237,5 +259,9 @@
     <script src="../assets/js/dashboards-analytics.js"></script>
     <script src="../assets/js/accidentabilidad.js"></script>
     <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+    <!-- NUEVO: librería Excel local + lógica -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="../assets/js/plan-acciones.js"></script>
   </body>
 </html>
