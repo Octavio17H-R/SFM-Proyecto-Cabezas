@@ -144,12 +144,12 @@
               </a>
 
               <ul class="menu-sub">
-                <li class="menu-item">
+                <li class="menu-item active">
                   <a href="1-cumplimiento.html" class="menu-link">
                     <div data-i18n="Without menu">Cumplimiento</div>
                   </a>
                 </li>
-                <li class="menu-item active">
+                <li class="menu-item">
                   <a href="2-OEE.html" class="menu-link">
                     <div data-i18n="Without navbar">OEE</div>
                   </a>
@@ -362,32 +362,54 @@
           <!-- Content wrapper -->
           <div class="content-wrapper">
             <!-- Content -->
-
-            <div class="container-xxl flex-grow-1 container-p-y">
-              <div class="row">
-                <!--/ Gráfica OEE -->
-                <div class="container-xxl flex-grow-1 container-p-y">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="card border-primary">
-                                <div class="card-body">
-      
-                                    <div id="loadingMessage" class="text-center p-5" style="display: none;">
-                                        <p>Cargando datos de la gráfica...</p>
-                                        <div class="spinner-border text-primary" role="status">
-                                            <span class="visually-hidden">Loading...</span>
-                                        </div>
-                                    </div>
-                                    <canvas id="graficoEA211" width="400" height="200"></canvas>
-                                    <canvas id="graficoEA888" width="400" height="200"></canvas>
-
-                                </div>
+              <div class="card-body">
+                      <div class="row mb-4">
+                        <!-- Columna principal -->
+                        <div class="col-md-12">
+                          <div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-3" style="padding-left: 2rem; padding-right: 2rem;">
+                            <div class="d-flex flex-wrap gap-2">
+                              <button id="btn-cargar"  class="btn btn-primary btn-sm">Cargar Excel</button>
+                              <button id="btn-guardar" class="btn btn-success btn-sm" disabled>Exportar Excel</button>
+                              <button id="btn-agregar" class="btn btn-outline-secondary btn-sm">Agregar fila</button>
+                              <button id="btn-limpiar" class="btn btn-outline-danger btn-sm">Limpiar tabla</button>
                             </div>
+                          </div>
                         </div>
+                      <div class="text-center mb-8">
+                      <span class="badge bg-primary fs-8" style="font-size:2rem; margin-top: 2rem; font-family: 'Public Sans', sans-serif;">
+                        Cumplimiento
+                      </span>
+                      </div>
+                        <div class="table-responsive mt-2" style="padding-left: 2rem; padding-right: 2rem;">
+                          <table class="table table-bordered table-hover">
+                            <thead class="table-light">
+                               <tr>
+                                  <th rowspan="2" style="width:15%;">Producto</th>
+                                  <th colspan="2" class="text-center">Lunes</th>
+                                  <th colspan="2" class="text-center">Martes</th>
+                                  <th colspan="2" class="text-center">Miércoles</th>
+                                  <th colspan="2" class="text-center">Jueves</th>
+                                  <th colspan="2" class="text-center">Viernes</th>
+                                  <th colspan="2" class="text-center">Sábado</th>
+                                  <th colspan="2" class="text-center">Domingo</th>
+                                </tr>
+                                <tr>
+                                  <th>PROD</th><th>CONS</th>
+                                  <th>PROD</th><th>CONS</th>
+                                  <th>PROD</th><th>CONS</th>
+                                  <th>PROD</th><th>CONS</th>
+                                  <th>PROD</th><th>CONS</th>
+                                  <th>PROD</th><th>CONS</th>
+                                  <th>PROD</th><th>CONS</th>
+                                </tr>
+                              </thead>
+                            <tbody id="monthly-data">
+                              <!-- filas se generan desde JS, celdas son contenteditable -->
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
                     </div>
-                </div>
-              </div>
-            </div>
             <!-- / Content -->
             <!-- Footer -->
             <footer class="content-footer footer bg-footer-theme">
@@ -460,12 +482,12 @@
     <!-- SheetJS para leer Excel -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@1.1.0/dist/chartjs-plugin-annotation.min.js"></script>
-    <script src="../assets/js/graficaoee.js"></script>
     <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
     <!-- Plugin para mostrar etiquetas dentro de las barras -->
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@1.2.1/dist/chartjs-plugin-annotation.min.js"></script>
+    <script src="../assets/js/cum-table.js"></script>
   </body>
 </html>

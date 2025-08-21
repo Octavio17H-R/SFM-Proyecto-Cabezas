@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
-    <title>Finanzas | SFM VWM</title>
-    <meta name="description" content="Página de Finanzas - SFM VWM" />
+    <title>Empleado | SFM VWM</title>
+    <meta name="description" content="Página de Empleado - SFM VWM" />
     <link rel="icon" type="image/x-icon" href="../img/R.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -36,7 +36,7 @@
           </div>
           <div class="menu-inner-shadow"></div>
           <ul class="menu-inner py-1">
-             <!-- PRINCIPAL -->
+            <!-- PRINCIPAL -->
             <li class="menu-item">
               <a href="index.html" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-home-circle"></i>
@@ -55,7 +55,7 @@
                 <li class="menu-item"><a href="3-cascada.html" class="menu-link"><div data-i18n="Container">Cascada Inf</div></a></li>
                 <li class="menu-item"><a href="4-accident.html" class="menu-link"><div data-i18n="Fluid">Accidentabilidad</div></a></li>
                 <li class="menu-item"><a href="5-stiba.html" class="menu-link"><div data-i18n="Blank">Stiba</div></a></li>
-                <li class="menu-item"><a href="6-ergonomia.html"class="menu-link"><div data-i18n="Fluid">Ergonomia</div></a></li>
+                <li class="menu-item"><a href="6-ergonomia.html" class="menu-link"><div data-i18n="Fluid">Ergonomia</div></a></li>
                 <li class="menu-item"><a href="7-plan de acciones.html" class="menu-link"><div data-i18n="Fluid">Plan de Acciones</div></a></li>
               </ul>
             </li>
@@ -74,7 +74,7 @@
               </ul>
             </li>
             <!-- FINANZAS -->
-            <li class="menu-item active">
+            <li class="menu-item active open">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-dollar"></i>
                 <div data-i18n="Layouts">Finanzas</div>
@@ -83,7 +83,7 @@
                 <li class="menu-item"><a href="1-fpk.html" class="menu-link"><div data-i18n="Without menu">FPK</div></a></li>
                 <li class="menu-item"><a href="2-dañado.html" class="menu-link"><div data-i18n="Without navbar">Material Dañado</div></a></li>
                 <li class="menu-item"><a href="3-auxiliar.html" class="menu-link"><div data-i18n="Container">Material Auxiliar</div></a></li>
-                <li class="menu-item"><a href="4-VBZ.html" class="menu-link"><div data-i18n="Fluid">VBZ</div></a></li>
+                <li class="menu-item active"><a href="4-VBZ.html" class="menu-link"><div data-i18n="Fluid">VBZ</div></a></li>
                 <li class="menu-item"><a href="5-mantenimiento.html" class="menu-link"><div data-i18n="Blank">Mantenimiento</div></a></li>
                 <li class="menu-item"><a href="7-plan de acciones.html" class="menu-link"><div data-i18n="Blank">Plan de Acciones</div></a></li>
               </ul>
@@ -102,6 +102,7 @@
                 <li class="menu-item"><a href="7-plan de acciones.html" class="menu-link"><div data-i18n="Blank">Plan de Acciones</div></a></li>
               </ul>
             </li>
+            <!-- Aquí puedes agregar más secciones del menú si lo deseas -->
           </ul>
         </aside>
         <!-- / Menu -->
@@ -159,66 +160,16 @@
           <div class="content-wrapper">
             <div class="container-xxl flex-grow-1 container-p-y">
               <div class="row g-4">
-                <!-- TARJETA FINANZAS -->
+                <!-- contenedor -->
                 <div class="col-12">
                   <div class="card shadow border-primary rounded-3 main-dashboard-card" style="min-height: 640px;">
-                    <div class="card-body d-flex flex-column">
-                      <h5 class="text-primary text-center fw-bold mb-4" style="font-size: 24px;">FINANZAS</h5>
-                      <div class="d-flex flex-wrap justify-content-around gap-3 flex-grow-1">
-                        <!-- FPK -->
-                        <div class="flex-fill" style="min-width: 140px; max-width: 180px;">
-                          <a href="1-fpk.html" class="btn btn-outline-primary w-100 fw-bold mb-2">FPK</a>
-                          <div class="card border-primary">
-                            <div class="card-body d-grid gap-3" style="grid-template-columns: 1fr; justify-items: center;">
-                              <div class="outer-box"><div class="inner-box">1</div></div>
-                              <div class="outer-box"><div class="inner-box">1</div></div>
-                            </div>
-                          </div>
-                        </div>
-                        <!-- MATERIAL DAÑADO -->
-                        <div class="flex-fill" style="min-width: 140px; max-width: 180px;">
-                          <a href="2-dañado.html" class="btn btn-outline-primary w-100 fw-bold mb-2">MATERIAL DAÑADO</a>
-                          <div class="card border-primary">
-                            <div class="card-body d-grid gap-3" style="grid-template-columns: 1fr; justify-items: center;">
-                              <div class="outer-box"><div class="inner-box">2</div></div>
-                              <div class="outer-box"><div class="inner-box">2</div></div>
-                            </div>
-                          </div>
-                        </div>
-                        <!-- MATERIAL AUXILIAR + VBZ -->
-                        <div class="flex-fill" style="min-width: 140px; max-width: 180px;">
-                          <a href="3-auxiliar.html" class="btn btn-outline-primary w-100 fw-bold mb-2">MATERIAL AUXILIAR</a>
-                          <div class="card border-primary mb-2">
-                            <div class="card-body d-grid gap-3" style="grid-template-columns: 1fr; justify-items: center;">
-                              <div class="outer-box"><div class="inner-box">3</div></div>
-                              <div class="outer-box"><div class="inner-box">3</div></div>
-                            </div>
-                          </div>
-                          <a href="4-VBZ.html" class="btn btn-outline-primary w-100 fw-bold mb-2">VBZ</a>
-                          <div class="card border-primary">
-                            <div class="card-body text-center">
-                              <div class="outer-box">7</div>
-                            </div>
-                          </div>
-                        </div>
-                        <!-- MANTENIMIENTO + PLAN DE ACCIONES -->
-                        <div class="flex-fill" style="min-width: 140px; max-width: 180px;">
-                          <a href="5-mantenimiento.html" class="btn btn-outline-primary w-100 fw-bold mb-2">MANTENIMIENTO</a>
-                          <div class="card border-primary mb-2">
-                            <div class="card-body d-grid gap-3" style="grid-template-columns: 1fr; justify-items: center;">
-                              <div class="outer-box"><div class="inner-box">5</div></div>
-                              <div class="outer-box"><div class="inner-box">5</div></div>
-                            </div>
-                          </div>
-                          <a href="7-plan de acciones.html" class="btn btn-outline-primary w-100 fw-bold mb-2">PLAN DE ACCIONES</a>
-                          <div class="card border-primary">
-                            <div class="card-body text-center">
-                              <div class="outer-box">7</div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                    <!-- CONTENIDO ----------------------------------------------------->
+                    <div class="text-center mb-8">
+                      <span class="badge bg-primary fs-8"style="font-size:2rem; margin-top: 2rem; font-family: 'Public Sans', sans-serif;">
+                       VBZ
+                      </span>
                     </div>
+                    <img src="../assets/ImgDatos/vbz.png"style="max-width: 900px; height: auto;display: block; margin: 0 auto;">
                   </div>
                 </div>
               </div>
