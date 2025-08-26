@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function () {
               { label: 'OEE', data: oee, backgroundColor: 'rgba(24, 79, 228, 0.8)', stack: 'Stack 1' },
               { label: 'Disponibilidad', data: disponibilidad, backgroundColor: 'rgba(54, 162, 235, 0.8)', stack: 'Stack 1' },
               { label: 'Desempeño', data: rendimiento, backgroundColor: 'rgba(236, 107, 20, 0.8)', stack: 'Stack 1' },
-              { label: 'Calidad', data: calidad, backgroundColor: 'rgba(119, 235, 144, 0.66)', stack: 'Stack 1' }
+              { label: 'Calidad', data: calidad, backgroundColor: 'rgba(25, 139, 50, 0.66)', stack: 'Stack 1' }
             ]
           },
           options: {

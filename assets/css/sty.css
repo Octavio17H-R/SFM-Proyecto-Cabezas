@@ -1,0 +1,37 @@
+/* Custom styles para complementar la plantilla de Sneat */
+
+/* Google Fonts: Inter */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* La fuente Inter se puede aplicar a elementos específicos si es necesario, 
+   pero la plantilla ya usa Public Sans globalmente. */
+.time-input,
+.custom-shadow,
+.custom-shadow-hover {
+    font-family: 'Inter', sans-serif;
+}
+
+/* Custom shadow para un look más suave */
+.custom-shadow {
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+.custom-shadow-hover:hover {
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.1);
+}
+
+/* Estilos para el input de tiempo editable */
+.time-input {
+    border: none;
+    background-color: transparent;
+    padding: 2px 4px;
+    border-radius: 4px;
+    width: 100%;
+    transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.time-input:focus {
+    outline: none;
+    background-color: #e0e7ff; /* Indigo claro en foco */
+    box-shadow: 0 0 0 2px #c7d2fe;
+}
