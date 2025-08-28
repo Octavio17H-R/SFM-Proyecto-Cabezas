@@ -1,0 +1,40 @@
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    text-align: center;
+    font-family: Arial, sans-serif;
+  }
+
+  thead tr {
+    background-color: #001f54;
+    color: white;
+    font-weight: bold;
+  }
+
+  thead th {
+    padding: 8px;
+    border: 1px solid #ccc;
+  }
+
+  tbody td {
+    padding: 6px;
+    border: 1px solid #ccc;
+    background-color: #f4f4f4;
+  }
+
+  /* Semáforos como círculos */
+  .semaforo {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .verde { background: #22c55e; }
+  .amarillo { background: #facc15; }
+  .rojo { background: #ef4444; }
+
+  /* Columnas de secciones con color */
+  .col-azul { background: #0a2f75; color: #fff; }
+  .col-rojo { background: #9b0031; color: #fff; }
+  .col-amarillo { background: #fbbf24; color: #000; }

@@ -37,24 +37,44 @@ document.addEventListener('DOMContentLoaded', function() {
           dayElement.dataset.day = dayNum;
 
           // Buscar datos para este día y mes
-          const dayInfo = calendarData.find(d => d.dia === dayNum && d.mes === currentMonth);
+          const dayInfo = calendarData.find(d => d.dia == dayNum && d.mes == currentMonth);
           if (dayInfo) dayElement.classList.add(dayInfo.tipo);
 
+          // Click en día
           dayElement.addEventListener('click', () => {
-            if (!selectedDayType) return;
+           if (dayInfo && dayInfo.tipo === 'accident') {
+          const container = document.getElementById('accidentImages');
+          container.innerHTML = ''; // limpiar imágenes previas
 
-            // Actualizar estilo del día
-            dayElement.className = 'calendar-day d-flex align-items-center justify-content-center rounded border mx-1';
-            dayElement.style.width = '40px';
-            dayElement.style.height = '40px';
-            dayElement.style.cursor = 'pointer';
-            dayElement.style.userSelect = 'none';
-            dayElement.classList.add(selectedDayType);
+              // aquí defines cuántas imágenes máximas por día quieres
+              // por ejemplo: hasta 3 imágenes por día con sufijo _1, _2, _3
+              for (let i = 1; i <= 3; i++) {
+                const imagePath = `../assets/Archivos/Empleado/Accidentes/${currentMonth}_${dayNum}_${i}.PNG`;
+                const img = document.createElement('img');
+                img.src = imagePath;
+                img.alt = `Accidente ${i}`;
+                img.style.maxWidth = "550px";
+                img.style.borderRadius = "8px";
+                img.style.boxShadow = "0 2px 6px rgba(0,0,0,0.3)";
+                img.onerror = () => img.remove(); // si la imagen no existe, se elimina
+                container.appendChild(img);
+              }
 
-            // Actualizar datos calendarData (ejemplo con valores genéricos para area, estatus y calificacion)
-            updateCalendarData(dayNum, currentMonth, selectedDayType, 'Área Genérica', 'Completado', 'Alta');
+              const modal = new bootstrap.Modal(document.getElementById('accidentModal'));
+              modal.show();
+            }else if (selectedDayType) {
+              // Actualizar estilo del día según selección
+              dayElement.className = 'calendar-day d-flex align-items-center justify-content-center rounded border mx-1';
+              dayElement.style.width = '40px';
+              dayElement.style.height = '40px';
+              dayElement.style.cursor = 'pointer';
+              dayElement.style.userSelect = 'none';
+              dayElement.classList.add(selectedDayType);
 
-            renderMonthlySummary();
+              // Actualizar datos
+              updateCalendarData(dayNum, currentMonth, selectedDayType, 'Área Genérica', 'Completado', 'Alta');
+              renderMonthlySummary();
+            }
           });
         } else {
           dayElement.textContent = '';
@@ -69,9 +89,8 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // Agrega o actualiza un día en calendarData
   function updateCalendarData(dia, mes, tipo, area = '', estatus = '', calificacion = '') {
-    const index = calendarData.findIndex(d => d.dia === dia && d.mes === mes);
+    const index = calendarData.findIndex(d => d.dia == dia && d.mes == mes);
     if (index >= 0) {
       calendarData[index] = {dia, mes, tipo, area, estatus, calificacion};
     } else {
@@ -79,7 +98,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
-  // Genera resumen mensual calculado desde calendarData (si no se carga desde Excel)
   function generateMonthlySummary() {
     const summary = {};
     calendarData.forEach(({dia, mes, tipo, area, estatus, calificacion}) => {
@@ -91,15 +109,12 @@ document.addEventListener('DOMContentLoaded', function() {
           calificaciones: new Set()
         };
       }
-      if (tipo === 'accident') {
-        summary[mes].cantidad++;
-      }
+      if (tipo === 'accident') summary[mes].cantidad++;
       if (area) summary[mes].areas.add(area);
       if (estatus) summary[mes].estatuses.add(estatus);
       if (calificacion) summary[mes].calificaciones.add(calificacion);
     });
 
-    // Convertir sets a texto
     Object.keys(summary).forEach(mes => {
       summary[mes].areas = Array.from(summary[mes].areas).join(', ');
       summary[mes].estatuses = Array.from(summary[mes].estatuses).join(', ');
@@ -108,7 +123,6 @@ document.addEventListener('DOMContentLoaded', function() {
     return summary;
   }
 
-  // Renderiza tabla resumen mensual usando datos calculados
   function renderMonthlySummary() {
     const summary = generateMonthlySummary();
     monthlySummaryBody.innerHTML = '';
@@ -126,7 +140,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // Renderizar resumen desde hoja Excel "Resumen Mensual"
   function renderResumenDesdeExcel(resumenData) {
     monthlySummaryBody.innerHTML = '';
     monthNames.forEach(mes => {
@@ -143,7 +156,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // Función para cargar el Excel automáticamente desde una ruta local dentro del proyecto
   function loadExcelFromUrl(url) {
     fetch(url)
       .then(response => {
@@ -152,13 +164,8 @@ document.addEventListener('DOMContentLoaded', function() {
       })
       .then(data => {
         const workbook = XLSX.read(data, { type: 'array' });
-
-        // Leer hoja "Diario"
         const diarioSheet = workbook.Sheets['Diario'];
-        if (!diarioSheet) {
-          alert('No se encontró la hoja "Diario"');
-          return;
-        }
+        if (!diarioSheet) return alert('No se encontró la hoja "Diario"');
         const diarioData = XLSX.utils.sheet_to_json(diarioSheet, { defval: '' });
         calendarData = diarioData.map(row => ({
           dia: parseInt(row.Día),
@@ -169,34 +176,24 @@ document.addEventListener('DOMContentLoaded', function() {
           calificacion: row.CALIFICACION || ''
         }));
 
-        // Leer hoja "Resumen Mensual"
         const resumenSheet = workbook.Sheets['Resumen Mensual'];
         let resumenData = [];
-        if (resumenSheet) {
-          resumenData = XLSX.utils.sheet_to_json(resumenSheet, { defval: '' });
-        }
+        if (resumenSheet) resumenData = XLSX.utils.sheet_to_json(resumenSheet, { defval: '' });
 
-        // Mostrar calendario con mes actual
         const currentMonth = monthNames[new Date().getMonth()];
         createCrossCalendar(currentMonth);
 
-        // Renderizar resumen (usar datos de Excel si hay, si no calcular)
-        if (resumenData.length > 0) {
-          renderResumenDesdeExcel(resumenData);
-        } else {
-          renderMonthlySummary();
-        }
+        if (resumenData.length > 0) renderResumenDesdeExcel(resumenData);
+        else renderMonthlySummary();
       })
       .catch(error => {
         alert("Error cargando archivo Excel: " + error.message);
-        // Inicializar calendario vacío si falla la carga
         createCrossCalendar(monthNames[new Date().getMonth()]);
         renderMonthlySummary();
       });
   }
 
   function exportToExcel() {
-    // Datos para hoja "Diario"
     const diarioData = calendarData.map(d => ({
       Día: d.dia,
       Mes: d.mes,
@@ -206,10 +203,7 @@ document.addEventListener('DOMContentLoaded', function() {
       CALIFICACION: d.calificacion
     }));
 
-    // Generar resumen mensual
     const resumen = generateMonthlySummary();
-
-    // Convertir resumen a formato array para exportar
     const resumenData = Object.keys(resumen).map(mes => ({
       Mes: mes,
       Cantidad_Total: resumen[mes].cantidad,
@@ -219,20 +213,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }));
 
     const wb = XLSX.utils.book_new();
-
-    // Crear hoja "Diario"
-    const wsDiario = XLSX.utils.json_to_sheet(diarioData);
-    XLSX.utils.book_append_sheet(wb, wsDiario, 'Diario');
-
-    // Crear hoja "Resumen Mensual"
-    const wsResumen = XLSX.utils.json_to_sheet(resumenData);
-    XLSX.utils.book_append_sheet(wb, wsResumen, 'Resumen Mensual');
-
-    // Guardar archivo Excel con dos hojas
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(diarioData), 'Diario');
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(resumenData), 'Resumen Mensual');
     XLSX.writeFile(wb, 'accidentabilidad.xlsx');
   }
 
-  // Botones para seleccionar tipo de día
   document.querySelectorAll('.day-control').forEach(btn => {
     btn.addEventListener('click', () => {
       selectedDayType = btn.dataset.type;
@@ -241,9 +226,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
-  // Listener para botón guardar cambios
   document.getElementById('saveChangesBtn').addEventListener('click', exportToExcel);
 
-  // Cargar Excel automáticamente desde ruta local dentro del proyecto
-  loadExcelFromUrl('../assets/Archivos/Empleado/accidentabilidad.xlsx'); // <--- Cambia esta ruta a la ubicación real de tu Excel
+  loadExcelFromUrl('../assets/Archivos/Empleado/accidentabilidad.xlsx');
 });

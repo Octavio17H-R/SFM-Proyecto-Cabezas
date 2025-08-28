@@ -1,4 +1,4 @@
-/* stock-table.js - versión PROD/CONS por día */
+/* stock-table.js - versión PROD por día */
 
 (function () {
   const tbody = document.getElementById('monthly-data');
@@ -7,7 +7,7 @@
   const btnLimpiar = document.getElementById('btn-limpiar');
 
   const dias = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
-  const subCols = ['PROD','CONS']; // Subcolumnas por día
+  const subCols = ['PROD']; // Solo PROD
 
   const productosFijos = [
     { nombre: 'EA888 EVO', meta: '2 hrs' },
@@ -16,20 +16,28 @@
     { nombre: 'EA211', meta: '2 hrs' }
   ];
 
-  // --- Inyectar CSS exclusivo de la tabla ---
-  const style = document.createElement('style');
-  style.innerHTML = `
-    #monthly-data { table-layout: fixed; width: 100%; border-collapse: collapse; }
-    #monthly-data th, #monthly-data td { border: 1px solid #ccc; padding: 0.5rem; text-align: center; box-sizing: border-box; vertical-align: middle; }
-    .producto-cell { min-width: 150px; max-width: 180px; white-space: normal; word-wrap: break-word; text-align: left; font-weight: 700; }
-    .day-cell { min-width: 50px; text-align: center; }
-    #monthly-data td[contenteditable="true"] { outline: none; background-color: #fff; }
-    .meta-line { font-weight: 400; font-size: 0.85rem; color: #333; display: block; }
-    .shaded td { background: #f5f5f5; }
-    .day-header { text-align: center; font-weight: 600; }
-  `;
-  document.head.appendChild(style);
+// --- Inyectar CSS exclusivo de la tabla ---
+const style = document.createElement('style');
+style.innerHTML = `
+  #monthly-data { table-layout: fixed; width: 100%; border-collapse: collapse; }
+  #monthly-data th, #monthly-data td { border: 1px solid #ccc; padding: 0.5rem; box-sizing: border-box; vertical-align: middle; }
+  .producto-cell { min-width: 150px; max-width: 180px; white-space: normal; word-wrap: break-word; text-align: left; font-weight: 700; }
+  .day-cell { min-width: 50px; text-align: center; }
+  #monthly-data td[contenteditable="true"] { outline: none; background-color: #fff; }
+  .meta-line { font-weight: 400; font-size: 0.85rem; color: #333; display: block; }
+  .shaded td { background: #f5f5f5; }
+  .day-header { text-align: center; font-weight: 600; }
 
+  /* Centrar los encabezados de días horizontal y verticalmente */
+  #monthly-data thead th {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center !important;
+      vertical-align: middle !important;
+  }
+`;
+document.head.appendChild(style);
   // --- Helpers ---
   function escapeHtml(text){ if(text==null||text==undefined) return ''; return String(text).replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
   function enableSaveIfHasRows(){ btnGuardar.disabled = tbody.children.length===0; }
@@ -48,12 +56,10 @@
                      `<div class="meta-line">Meta: ${escapeHtml(productoObj.meta)}</div>`;
     tr.appendChild(tdProd);
 
-    // Columnas PROD/CONS por día
+    // Columnas PROD por día
     dias.forEach(d => {
-      subCols.forEach(sub => {
-        const td = makeCell(datosDias[d]?.[sub] || '', 'day-cell', true);
-        tr.appendChild(td);
-      });
+      const td = makeCell(datosDias[d]?.PROD || '', 'day-cell', true);
+      tr.appendChild(td);
     });
 
     tbody.appendChild(tr);
@@ -78,7 +84,7 @@
         const rowExcel = rows[i+1] || [];
         const datosDias = {};
         dias.forEach((d, idx) => {
-          datosDias[d] = { PROD: rowExcel[idx*2+1]||'', CONS: rowExcel[idx*2+2]||'' };
+          datosDias[d] = { PROD: rowExcel[idx+1] || '' }; // Solo PROD
         });
         addRow(productosFijos[i], datosDias);
       }
@@ -93,12 +99,11 @@
 
   // --- Exportar Excel ---
   btnGuardar.addEventListener('click', function(){
-    const header = ['Producto'];
-    dias.forEach(d => subCols.forEach(sub => header.push(`${d}-${sub}`)));
+    const header = ['Producto', ...dias]; // Solo PROD
     const aoa = [header];
     for(const tr of tbody.children){
       const cells = Array.from(tr.children).map(td=>td.innerText.trim());
-      aoa.push(cells.slice(0, 15)); // Producto + 14 columnas
+      aoa.push(cells.slice(0, 1 + dias.length)); // Producto + 7 PROD
     }
     const ws = XLSX.utils.aoa_to_sheet(aoa);
     const wb = XLSX.utils.book_new();

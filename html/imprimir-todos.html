@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Imprimir Productividad y Desecho</title>
+  <!-- CSS Required (ajusta las rutas según necesidad) -->
+  <link rel="stylesheet" href="../assets/vendor/css/core.css" />
+  <link rel="stylesheet" href="../assets/vendor/css/theme-default.css" />
+  <link rel="stylesheet" href="../assets/css/custom.css" />
+  <link rel="stylesheet" href="../assets/vendor/libs/apex-charts/apex-charts.css" />
+</head>
+<body style="background: #fff;">
+  <div class="container-xxl py-4">
+    <h2 class="mb-4 text-center text-primary">Gráficos de Productividad (EA888 y EA211)</h2>
+    <div class="row g-4" id="graficos-productividad">
+      <div class="col-md-12">
+        <div class="chart-container mb-4" id="chart_ea888_1"></div>
+      </div>
+      <div class="col-md-12">
+        <div class="chart-container mb-4" id="chart_ea888_2"></div>
+      </div>
+      <div class="col-md-12">
+        <div class="chart-container mb-4" id="chart_ea888_3"></div>
+      </div>
+      <div class="col-md-12">
+        <div class="chart-container mb-4" id="chart_ea211_1"></div>
+      </div>
+      <div class="col-md-12">
+        <div class="chart-container mb-4" id="chart_ea211_2"></div>
+      </div>
+      <div class="col-md-12">
+        <div class="chart-container mb-4" id="chart_ea211_3"></div>
+      </div>
+    </div>
+    <hr class="my-4">
+    <h2 class="mb-4 text-center text-danger">Gráficos de Desecho (EA888 y EA211)</h2>
+    <div class="row g-4" id="graficos-desecho">
+      <div class="col-md-12">
+        <div class="chart-container mb-4" id="des_chart_ea888_1"></div>
+      </div>
+      <div class="col-md-12">
+        <div class="chart-container mb-4" id="des_chart_ea888_2"></div>
+      </div>
+      <div class="col-md-12">
+        <div class="chart-container mb-4" id="des_chart_ea888_3"></div>
+      </div>
+      <div class="col-md-12">
+        <div class="chart-container mb-4" id="des_chart_ea211_1"></div>
+      </div>
+      <div class="col-md-12">
+        <div class="chart-container mb-4" id="des_chart_ea211_2"></div>
+      </div>
+      <div class="col-md-12">
+        <div class="chart-container mb-4" id="des_chart_ea211_3"></div>
+      </div>
+    </div>
+    <div class="text-center mt-5">
+      <button class="btn btn-primary btn-lg" onclick="window.print()">Imprimir todos los gráficos</button>
+    </div>
+  </div>
+  
+  <!-- JS Required (ajusta las rutas y agrega los archivos necesarios para renderizar los gráficos) -->
+  <script src="../assets/vendor/libs/apex-charts/apexcharts.js"></script>
+  <!-- Aquí debes agregar los JS que inicializan tus gráficos, por ejemplo los de productividad y desecho -->
+  <script src="../assets/js/produc.js"></script>
+  <script src="../assets/js/des.js"></script>
+  <!-- Si necesitas lógicas extra para que los gráficos se rendericen automáticamente, agrégalas aquí -->
+</body>
+</html>

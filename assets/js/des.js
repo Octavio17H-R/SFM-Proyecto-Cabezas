@@ -75,7 +75,7 @@
 
   async function loadAndRenderCharts() {
     try {
-      const response = await fetch('../assets/Archivos/Proceso/productividad.xlsx');
+      const response = await fetch('../assets/Archivos/Calidad/Desecho.xlsx');
       const arrayBuffer = await response.arrayBuffer();
       const workbook = XLSX.read(arrayBuffer, { type: 'array' });
 

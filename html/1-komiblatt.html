@@ -46,6 +46,7 @@
     <link rel="stylesheet" href="../assets/vendor/css/core.css" class="template-customizer-core-css" />
     <link rel="stylesheet" href="../assets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
     <link rel="stylesheet" href="../assets/css/demo.css" />
+    <link rel="stylesheet" href="../assets/css/Kom.css" />
 
     <!-- Vendors CSS -->
     <link rel="stylesheet" href="../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
@@ -227,7 +228,7 @@
                   </a>
                 </li>
                 <li class="menu-item">
-                  <a href="layouts-container.html" class="menu-link">
+                  <a href="3-desecho.html" class="menu-link">
                     <div data-i18n="Container">Desecho/Retrabajo</div>
                   </a>
                 </li>
@@ -359,85 +360,75 @@
             <!-- Content -->
 
             <div class="container-xxl flex-grow-1 container-p-y">
-              <div class="row">
-                  <!-----grafico------------------------------------------------------------>
-                    <!-- CARGA DE EXCEL Y GRÁFICA -->
-                    <div class="w-100">
-                      <div class="card border-primary mt-4">
-                        <div class="card-body">
-                          <h6 class="text-center mb-3">Cargar datos de Excel (.xlsx)</h6>
-                          <input type="file" id="fileExcel" accept=".xlsx" class="form-control mb-3" />
-                          <canvas id="graficaFinanzas" height="200"></canvas>
-                        </div>
-                      </div>
+              <div class="row justify-content-center">
+                <div class="col-12">
+                  <div class="card shadow border-primary rounded-3 main-dashboard-card" style="min-height: 640px;">
+                  <div class="card card-body">
+                    <!-- TÍTULO SEPARADO -->
+                    <div class="d-block w-100 text-center py-2 mb-4" style="font-size:2rem;font-weight:600;letter-spacing:.04em;background:#f6f9ff;border:1.5px solid #1976d2;border-radius:10px;color:#1976d2;box-shadow:0 2px 8px #1976d22e;">
+                    KOMIBLATT
                     </div>
-
-
-<!------------------SEGMENTO ADICIONAL--------------------->
-                <!-- Total Revenue -->
-                <div class="col-12 col-lg-12 order-2 order-md-3 order-lg-2 mb-4">
-                  <div class="card">
-                    <div class="row row-bordered g-0">
-                      <div class="text-center mb-8">
-                      <span class="badge bg-primary fs-8"style="font-size:2rem; margin-top: 2rem; font-family: 'Public Sans', sans-serif;">
-                        Kombiblatt
-                      </span>
+                    <div class="card-body">
+                      <!-- TABLA KOMIBLATT -->
+                      <div class="mb-4 table-responsive" style="max-width: 98vw; overflow-x: auto;">
+                        <table id="tablaIndicadores" class="table table-bordered table-striped table-hover text-center align-middle shadow-sm table-sm mb-0" style="font-size:0.95rem; min-width: 900px; max-width: 100%; width: 100%;">
+                          <thead class="table-primary">
+                            <tr>
+                              <th class="align-middle">Áreas</th>
+                              <th class="align-middle" colspan="2">Accidentes</th>
+                              <th class="align-middle" colspan="3">Volumen</th>
+                              <th class="align-middle" colspan="3">Productividad</th>
+                              <th class="align-middle" colspan="2">OEE (%)</th>
+                              <th class="align-middle" colspan="3">Alcance</th>
+                              <th class="align-middle" colspan="3">Calidad</th>
+                            </tr>
+                            <tr class="table-light">
+                              <th></th>
+                              <th>Meta</th><th>Real</th>
+                              <th>Meta</th><th>Status</th><th>Real</th>
+                              <th>Meta</th><th>Status</th><th>Real</th>
+                              <th>Status</th><th>Real</th>
+                              <th>Modelo</th><th>Status</th><th>Real</th>
+                              <th>Meta</th><th>Status</th><th>Real</th>
+                            </tr>
+                          </thead>
+                          <tbody id="cuerpoTabla"></tbody>
+                        </table>
                       </div>
-                      <div class="col-md-8">
-                        <h5 class="card-header m-0 me-2 pb-3">Produccion Corazones</h5>
-                        <div id="totalRevenueChart" class="px-2"></div>
-                      </div>
-                      <div class="col-md-4">
-                        <div class="card-body">
-                          <div class="text-center">
-                            <div class="dropdown">
-                              <button
-                                class="btn btn-sm btn-outline-primary dropdown-toggle"
-                                type="button"
-                                id="growthReportId"
-                                data-bs-toggle="dropdown"
-                                aria-haspopup="true"
-                                aria-expanded="false"
-                              >
-                                2022
-                              </button>
-                              <div class="dropdown-menu dropdown-menu-end" aria-labelledby="growthReportId">
-                                <a class="dropdown-item" href="javascript:void(0);">2021</a>
-                                <a class="dropdown-item" href="javascript:void(0);">2020</a>
-                                <a class="dropdown-item" href="javascript:void(0);">2019</a>
-                              </div>
+                      <!-- MINI-RESÚMENES PRODUCTIVIDAD Y OEE -->
+                      <div class="row g-3 mb-4 justify-content-center">
+                        <div class="col-12 col-md-6">
+                          <div class="card mini-chart-card">
+                            <div class="card-body py-2">
+                              <p class="fw-bold mb-2 text-center">Productividad</p>
+                              <canvas id="miniGraficoProductividad" width="180" height="90" style="max-width:100%;"></canvas>
                             </div>
                           </div>
                         </div>
-                        <div id="growthChart"></div>
-                        <div class="text-center fw-semibold pt-3 mb-2">62% Company Growth</div>
-
-                        <div class="d-flex px-xxl-4 px-lg-2 p-4 gap-xxl-3 gap-lg-1 gap-3 justify-content-between">
-                          <div class="d-flex">
-                            <div class="me-2">
-                              <span class="badge bg-label-primary p-2"><i class="bx bx-dollar text-primary"></i></span>
-                            </div>
-                            <div class="d-flex flex-column">
-                              <small>2022</small>
-                              <h6 class="mb-0">$32.5k</h6>
+                        <div class="col-12 col-md-6">
+                          <div class="card mini-chart-card">
+                            <div class="card-body py-2">
+                              <p class="fw-bold mb-2 text-center">OEE</p>
+                              <canvas id="miniGraficoOEE" width="180" height="90" style="max-width:100%;"></canvas>
                             </div>
                           </div>
-                          <div class="d-flex">
-                            <div class="me-2">
-                              <span class="badge bg-label-info p-2"><i class="bx bx-wallet text-info"></i></span>
-                            </div>
-                            <div class="d-flex flex-column">
-                              <small>2021</small>
-                              <h6 class="mb-0">$41.2k</h6>
+                        </div>
+                      </div>
+                      <!-- MINI-GRAFICO DE VOLUMEN ABAJO -->
+                      <div class="row mt-4 justify-content-center">
+                        <div class="col-8 col-md-4">
+                          <div class="card mini-chart-card">
+                            <div class="card-body py-2">
+                              <p class="fw-bold mb-2 text-center">Volumen</p>
+                              <canvas id="miniGraficoVolumen" width="120" height="70" style="max-width:100%;"></canvas>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
+                  </div>
                 </div>
-                <!--/ Total Revenue -->
-
               </div>
             </div>
             <!-- / Content -->
