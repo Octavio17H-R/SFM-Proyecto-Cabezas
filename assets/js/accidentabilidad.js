@@ -3,12 +3,19 @@ document.addEventListener('DOMContentLoaded', function() {
                       "Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
 
   let selectedDayType = null;
-  let calendarData = []; // Datos diarios: {dia, mes, tipo, area, estatus, calificacion}
-  
+  let calendarData = []; // Todos los datos del excel
+  let resumenData = [];
+
+  const monthSelect = document.getElementById('month-select');
+  let selectedMonth = monthNames[new Date().getMonth()]; // Siempre inicia con mes actual
+
   const calendarDaysContainer = document.getElementById('calendar-days');
   const monthlySummaryBody = document.getElementById('monthly-summary-body');
 
-  // Crear calendario cruz con días
+  function getCurrentCalendarData(mes) {
+    return calendarData.filter(d => d.mes === mes);
+  }
+
   function createCrossCalendar(currentMonth) {
     calendarDaysContainer.innerHTML = '';
     const crossRows = [
@@ -20,6 +27,8 @@ document.addEventListener('DOMContentLoaded', function() {
       [28, 29, 30],
       [null, 31, null]
     ];
+
+    const calendarDataForMonth = getCurrentCalendarData(currentMonth);
 
     crossRows.forEach(rowDays => {
       const rowDiv = document.createElement('div');
@@ -37,17 +46,15 @@ document.addEventListener('DOMContentLoaded', function() {
           dayElement.dataset.day = dayNum;
 
           // Buscar datos para este día y mes
-          const dayInfo = calendarData.find(d => d.dia == dayNum && d.mes == currentMonth);
+          const dayInfo = calendarDataForMonth.find(d => d.dia == dayNum);
           if (dayInfo) dayElement.classList.add(dayInfo.tipo);
 
           // Click en día
           dayElement.addEventListener('click', () => {
            if (dayInfo && dayInfo.tipo === 'accident') {
-          const container = document.getElementById('accidentImages');
-          container.innerHTML = ''; // limpiar imágenes previas
+              const container = document.getElementById('accidentImages');
+              container.innerHTML = ''; // limpiar imágenes previas
 
-              // aquí defines cuántas imágenes máximas por día quieres
-              // por ejemplo: hasta 3 imágenes por día con sufijo _1, _2, _3
               for (let i = 1; i <= 3; i++) {
                 const imagePath = `../assets/Archivos/Empleado/Accidentes/${currentMonth}_${dayNum}_${i}.PNG`;
                 const img = document.createElement('img');
@@ -56,14 +63,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 img.style.maxWidth = "550px";
                 img.style.borderRadius = "8px";
                 img.style.boxShadow = "0 2px 6px rgba(0,0,0,0.3)";
-                img.onerror = () => img.remove(); // si la imagen no existe, se elimina
+                img.onerror = () => img.remove();
                 container.appendChild(img);
               }
 
               const modal = new bootstrap.Modal(document.getElementById('accidentModal'));
               modal.show();
-            }else if (selectedDayType) {
-              // Actualizar estilo del día según selección
+            } else if (selectedDayType) {
               dayElement.className = 'calendar-day d-flex align-items-center justify-content-center rounded border mx-1';
               dayElement.style.width = '40px';
               dayElement.style.height = '40px';
@@ -71,7 +77,6 @@ document.addEventListener('DOMContentLoaded', function() {
               dayElement.style.userSelect = 'none';
               dayElement.classList.add(selectedDayType);
 
-              // Actualizar datos
               updateCalendarData(dayNum, currentMonth, selectedDayType, 'Área Genérica', 'Completado', 'Alta');
               renderMonthlySummary();
             }
@@ -177,18 +182,19 @@ document.addEventListener('DOMContentLoaded', function() {
         }));
 
         const resumenSheet = workbook.Sheets['Resumen Mensual'];
-        let resumenData = [];
+        resumenData = [];
         if (resumenSheet) resumenData = XLSX.utils.sheet_to_json(resumenSheet, { defval: '' });
 
-        const currentMonth = monthNames[new Date().getMonth()];
-        createCrossCalendar(currentMonth);
-
-        if (resumenData.length > 0) renderResumenDesdeExcel(resumenData);
-        else renderMonthlySummary();
+        // Selecciona el mes actual (corriente) al cargar
+        if (monthSelect) {
+          monthSelect.value = monthNames[new Date().getMonth()];
+          selectedMonth = monthSelect.value;
+        }
+        renderForSelectedMonth();
       })
       .catch(error => {
         alert("Error cargando archivo Excel: " + error.message);
-        createCrossCalendar(monthNames[new Date().getMonth()]);
+        createCrossCalendar(selectedMonth);
         renderMonthlySummary();
       });
   }
@@ -204,7 +210,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }));
 
     const resumen = generateMonthlySummary();
-    const resumenData = Object.keys(resumen).map(mes => ({
+    const resumenDataXls = Object.keys(resumen).map(mes => ({
       Mes: mes,
       Cantidad_Total: resumen[mes].cantidad,
       Áreas: resumen[mes].areas,
@@ -214,8 +220,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(diarioData), 'Diario');
-    XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(resumenData), 'Resumen Mensual');
+    XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(resumenDataXls), 'Resumen Mensual');
     XLSX.writeFile(wb, 'accidentabilidad.xlsx');
+  }
+
+  function renderForSelectedMonth() {
+    createCrossCalendar(selectedMonth);
+    if (resumenData && resumenData.length > 0) {
+      renderResumenDesdeExcel(resumenData);
+    } else {
+      renderMonthlySummary();
+    }
   }
 
   document.querySelectorAll('.day-control').forEach(btn => {
@@ -227,6 +242,16 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   document.getElementById('saveChangesBtn').addEventListener('click', exportToExcel);
+
+  if (monthSelect) {
+    // Selecciona el mes corriente cuando la página se abre
+    monthSelect.value = monthNames[new Date().getMonth()];
+    selectedMonth = monthSelect.value;
+    monthSelect.addEventListener('change', function() {
+      selectedMonth = this.value;
+      renderForSelectedMonth();
+    });
+  }
 
   loadExcelFromUrl('../assets/Archivos/Empleado/accidentabilidad.xlsx');
 });

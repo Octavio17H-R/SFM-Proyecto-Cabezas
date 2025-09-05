@@ -1,5 +1,5 @@
 // La ruta a tu archivo de Excel
-const EXCEL_FILE_PATH = '../assets/Archivos/Finanzas/budget.xlsx';
+const EXCEL_FILE_PATH = '../assets/Archivos/Finanzas/fpk.xlsx';
 
 // Referencias a los elementos de la tabla en el HTML
 const costoRow = document.getElementById('costoRow');
@@ -61,8 +61,8 @@ async function loadExcelAndRender(sheetName) {
       totalBudget2025 += budget;
 
       // Llenar tabla
-      costoRow.cells[i+1].innerHTML = `<input type="number" value="${costo}" readonly>`;
-      budgetRow.cells[i+1].innerHTML = `<input type="number" value="${budget}" readonly>`;
+      costoRow.cells[i+1].textContent = costo.toLocaleString('en-US');
+      budgetRow.cells[i+1].textContent = budget.toLocaleString('en-US');
     }
 
     // Actualiza los totales

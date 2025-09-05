@@ -15,6 +15,16 @@ const icons = {
     training: `<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-pink-500"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v16H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>`,
 };
 
+
+// --- Colores por día ---
+const dayColors = { 
+    'L': 'bg-blue-500', 
+    'M': 'bg-green-500', 
+    'MI': 'bg-yellow-500', 
+    'J': 'bg-red-500', 
+    'V': 'bg-purple-500' 
+};
+
 // --- Data for the cards ---
 const dashboardData = [
     // AGENDA
@@ -23,82 +33,109 @@ const dashboardData = [
     { id: 'agenda-3', column: 'agenda', icon: icons.kombiblat, title: 'Kombiblatt: puntos en rojo y acciones', time: '6:56-6:58' },
     { id: 'agenda-4', column: 'agenda', icon: icons.teams, title: 'Situación Actual de Equipos', time: '6:58-7:00' },
     // DIARIO
-    { id: 'diario-1', column: 'diario', icon: icons.shopfloor, title: 'Reporte Cierre Semanal', day: 'L' },
-    { id: 'diario-2', column: 'diario', icon: icons.lightbulb, title: 'Seguimiento SdP', day: 'M' },
-    { id: 'diario-3', column: 'diario', icon: icons.planning, title: 'Planificación EMOS', day: 'J' },
-    { id: 'diario-4', column: 'diario', icon: icons.warning, title: 'Accidentabilidad', day: 'V' },
+    { id: 'diario-1', column: 'diario', icon: icons.shopfloor, title: 'Reporte Cierre Semanal' },
+    { id: 'diario-2', column: 'diario', icon: icons.lightbulb, title: 'Seguimiento SdP' },
+    { id: 'diario-3', column: 'diario', icon: icons.planning, title: 'Planificación EMOS' },
+    { id: 'diario-4', column: 'diario', icon: icons.warning, title: 'Accidentabilidad' },
     // SEMANAL
-    { id: 'semanal-1', column: 'semanal', icon: icons.tpm, title: 'Mantenimiento Herramentales', day: 'L' },
-    { id: 'semanal-2', column: 'semanal', icon: icons.tpm, title: 'Mantenimiento Máquinas Críticas', day: 'M' },
-    { id: 'semanal-3', column: 'semanal', icon: icons.quality, title: 'Fallas de calidad', day: 'MI' },
+    { id: 'semanal-1', column: 'semanal', icon: icons.tpm, title: 'Mantenimiento Herramentales' },
+    { id: 'semanal-2', column: 'semanal', icon: icons.tpm, title: 'Mantenimiento Máquinas Críticas' },
+    { id: 'semanal-3', column: 'semanal', icon: icons.quality, title: 'Fallas de calidad' },
     // MENSUAL
-    { id: 'mensual-1', column: 'mensual', icon: icons.costs, title: 'Costos', day: 'M' },
-    { id: 'mensual-2', column: 'mensual', icon: icons.teams, title: 'FPK / VBZ', day: 'M' },
-    { id: 'mensual-3', column: 'mensual', icon: icons.speed, title: 'SPEED+', day: 'J' },
-    { id: 'mensual-4', column: 'mensual', icon: icons.vacation, title: 'Saldo de vacaciones', day: 'J' },
-    { id: 'mensual-5', column: 'mensual', icon: icons.training, title: 'Capacitación', day: 'V' },
+    { id: 'mensual-1', column: 'mensual', icon: icons.costs, title: 'Costos' },
+    { id: 'mensual-2', column: 'mensual', icon: icons.teams, title: 'FPK / VBZ' },
+    { id: 'mensual-3', column: 'mensual', icon: icons.speed, title: 'SPEED+' },
+    { id: 'mensual-4', column: 'mensual', icon: icons.vacation, title: 'Saldo de vacaciones' },
+    { id: 'mensual-5', column: 'mensual', icon: icons.training, title: 'Capacitación' },
 ];
 
-// --- Function to create a single card element ---
+// --- Crear tarjeta ---
 function createCard(item) {
-    const dayColors = {
-        'L': 'bg-blue-500', 'M': 'bg-green-500', 'MI': 'bg-yellow-500',
-        'J': 'bg-red-500', 'V': 'bg-purple-500',
-    };
-    const dayColor = item.day ? (dayColors[item.day] || 'bg-gray-500') : '';
+    const savedData = JSON.parse(localStorage.getItem("tasksData")) || {};
+    const savedItem = savedData[item.id] || {};
+    const timeValue = savedItem.time || item.time || '';
+    const isChecked = savedItem.completed ? "checked" : "";
 
-    const timeField = item.time
-        ? `<input type="text" value="${item.time}" data-id="${item.id}" class="time-input text-sm font-semibold text-gray-800">`
-        : '';
+    const timeField = item.time ? `<input type="text" value="${timeValue}" data-id="${item.id}" class="time-input text-sm font-semibold text-gray-800">` : '';
 
-    const cardHTML = `
-        <div class="card p-4 flex items-center gap-4 custom-shadow custom-shadow-hover transition-shadow duration-300">
-            <div class="flex-shrink-0 w-12 h-12">${item.icon}</div>
-            <div class="flex-grow">
-                ${timeField}
-                <p class="text-md ${item.time ? 'text-secondary' : 'font-semibold text-gray-800'}">${item.title}</p>
+    let daysHTML = '';
+    let checkboxHTML = '';
+
+    // Solo SEMANAL y MENSUAL
+    if(item.column === 'semanal' || item.column === 'mensual') {
+        checkboxHTML = `<input type="checkbox" class="task-check w-5 h-5 flex-none" data-id="${item.id}" ${isChecked}>`;
+
+        const savedDays = savedItem.days || [];
+        daysHTML = ['L','M','MI','J','V'].map(d => {
+            const activeClass = savedDays.includes(d) ? 'bg-gray-800' : dayColors[d];
+            return `<span class="day-circle w-6 h-6 rounded-full ${activeClass} text-white flex items-center justify-center font-bold text-xs cursor-pointer" data-id="${item.id}" data-day="${d}">${d}</span>`;
+        }).join('');
+    }
+
+    return `
+        <div class="card p-4 flex flex-col gap-3 custom-shadow custom-shadow-hover transition-shadow duration-300">
+            <div class="flex items-center gap-3">
+                ${checkboxHTML}
+                <div class="flex-shrink-0 w-12 h-12">${item.icon}</div>
+                <div class="flex-grow">
+                    ${timeField}
+                    <p class="text-md ${item.time ? 'text-secondary' : 'font-semibold text-gray-800'}">${item.title}</p>
+                </div>
             </div>
-            ${item.day ? `
-            <div class="flex-shrink-0 w-8 h-8 rounded-full ${dayColor} text-white flex items-center justify-center font-bold text-sm">
-                ${item.day}
-            </div>` : ''}
+            ${daysHTML ? `<div class="flex justify-center gap-2 mt-2">${daysHTML}</div>` : ''}
         </div>
     `;
-    return cardHTML;
 }
 
-// --- Function to render all cards to the DOM ---
-function renderDashboard() {
-    // Clear existing cards
-    document.getElementById('agenda-cards').innerHTML = '';
-    document.getElementById('diario-cards').innerHTML = '';
-    document.getElementById('semanal-cards').innerHTML = '';
-    document.getElementById('mensual-cards').innerHTML = '';
 
-    // Loop through data and append cards
+
+// --- Renderizar dashboard ---
+function renderDashboard() {
+    ['agenda','diario','semanal','mensual'].forEach(col => document.getElementById(`${col}-cards`).innerHTML = '');
     dashboardData.forEach(item => {
         const container = document.getElementById(`${item.column}-cards`);
-        if (container) {
-            container.innerHTML += createCard(item);
-        }
+        if(container) container.innerHTML += createCard(item);
     });
 }
 
-// --- Event Listener to handle time changes ---
+// --- Guardar cambios de hora y checkbox ---
 document.getElementById('dashboard-main').addEventListener('change', (event) => {
-    if (event.target.classList.contains('time-input')) {
-        const inputElement = event.target;
-        const itemId = inputElement.dataset.id;
-        const newTime = inputElement.value;
-        const itemToUpdate = dashboardData.find(item => item.id === itemId);
+    const tasksData = JSON.parse(localStorage.getItem("tasksData")) || {};
 
-        if (itemToUpdate) {
-            itemToUpdate.time = newTime;
-            console.log(`Updated item ${itemId} with new time: ${newTime}`);
-            console.log('Current data state:', dashboardData);
+    if(event.target.classList.contains("time-input")) {
+        const id = event.target.dataset.id;
+        if(!tasksData[id]) tasksData[id] = {};
+        tasksData[id].time = event.target.value;
+    }
+
+    if(event.target.classList.contains("task-check")) {
+        const id = event.target.dataset.id;
+        if(!tasksData[id]) tasksData[id] = {};
+        tasksData[id].completed = event.target.checked;
+    }
+
+    localStorage.setItem("tasksData", JSON.stringify(tasksData));
+});
+
+// --- Clic en círculo de día ---
+document.getElementById('dashboard-main').addEventListener('click', (event) => {
+    if(event.target.classList.contains('day-circle')) {
+        const id = event.target.dataset.id;
+        const day = event.target.dataset.day;
+        const tasksData = JSON.parse(localStorage.getItem("tasksData")) || {};
+        if(!tasksData[id]) tasksData[id] = {};
+        if(!tasksData[id].days) tasksData[id].days = [];
+
+        if(tasksData[id].days.includes(day)) {
+            tasksData[id].days = tasksData[id].days.filter(d => d !== day);
+        } else {
+            tasksData[id].days.push(day);
         }
+
+        localStorage.setItem("tasksData", JSON.stringify(tasksData));
+        renderDashboard(); // re-render para actualizar color
     }
 });
 
-// --- Initial render when the page loads ---
+// --- Inicializar ---
 document.addEventListener('DOMContentLoaded', renderDashboard);

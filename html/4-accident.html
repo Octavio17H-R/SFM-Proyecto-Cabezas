@@ -94,10 +94,10 @@
                 <div data-i18n="Layouts">Calidad</div>
               </a>
               <ul class="menu-sub">
-                <li class="menu-item"><a href="1-komiblatt.html" class="menu-link"><div data-i18n="Without menu">Auditoria</div></a></li>
-                <li class="menu-item"><a href="2-agenda.html" class="menu-link"><div data-i18n="Without navbar">Reclamaciones</div></a></li>
+                <li class="menu-item"><a href="1-auditoria.html" class="menu-link"><div data-i18n="Without menu">Auditoria</div></a></li>
+                <li class="menu-item"><a href="2-recla.html" class="menu-link"><div data-i18n="Without navbar">Reclamaciones</div></a></li>
                 <li class="menu-item"><a href="3-desecho.html" class="menu-link"><div data-i18n="Container">Desecho/Retrabajo</div></a></li>
-                <li class="menu-item"><a href="layouts-fluid.html" class="menu-link"><div data-i18n="Fluid">Prozessmonitor</div></a></li>
+                <li class="menu-item"><a href="4-proz.html" class="menu-link"><div data-i18n="Fluid">Prozessmonitor</div></a></li>
                 <li class="menu-item"><a href="7-plan de acciones.html" class="menu-link"><div data-i18n="Blank">Plan de Acciones</div></a></li>
               </ul>
             </li>
@@ -172,13 +172,29 @@
                     <h5>Responsable: <span class="text-success">Javier González Parra</span></h5>
                     <h5>Año: <span class="text-primary">2025</span></h5>
                     </div>
-                                    <!-- Dentro de .card-body -->
+                    <!-- Dentro de .card-body -->
                     <div class="card-body">
                       <div class="row mb-4">
                         <!-- Columna principal -->
                         <div class="col-md-8">
                           <div class="d-flex justify-content-between align-items-center mb-3" style="padding-left: 2rem; padding-right: 2rem;">
-                            <h5>MES: <span class="text-primary" id="current-month">Agosto</span></h5>
+                            <div style="display:flex;align-items:center;gap:0.5rem;">
+                            <label for="month-select" class="form-label mb-0 fs-5">MES:</label>
+                            <select id="month-select" class="form-select form-select-lg" style="width:100px; min-width:160px; font-size:1.2rem; display:inline-block;">
+                            <option value="Enero">Enero</option>
+                            <option value="Febrero">Febrero</option>
+                            <option value="Marzo">Marzo</option>
+                            <option value="Abril">Abril</option>
+                            <option value="Mayo">Mayo</option>
+                            <option value="Junio">Junio</option>
+                            <option value="Julio">Julio</option>
+                            <option value="Agosto">Agosto</option>
+                            <option value="Septiembre">Septiembre</option>
+                            <option value="Octubre">Octubre</option>
+                            <option value="Noviembre">Noviembre</option>
+                            <option value="Diciembre">Diciembre</option>
+                            </select>
+                          </div>
                           </div>
                           <!-- Calendario minimalista -->
                           <div class="calendar-minimal mb-4">
@@ -307,5 +323,6 @@
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
     <script src="../assets/js/accidentabilidad.js"></script>
+    <script src="../assets/js/busqueda.js"></script>
   </body>
 </html>

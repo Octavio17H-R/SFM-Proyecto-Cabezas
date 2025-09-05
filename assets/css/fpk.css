@@ -124,3 +124,25 @@
             background-color: #ffffff; /* Added for debugging: make canvas background white */
             border: 1px solid #ddd; /* Added for debugging: make canvas border visible */
         }
+
+/* --- AJUSTE COMPACTO EXTRADENSO PARA TABLA DE COSTOS FPK --- */
+.data-table {
+    min-width: 580px !important;
+    font-size: 0.97rem !important;
+}
+.data-table th, .data-table td {
+    padding: 4px 2px !important;
+    font-size: 0.97rem !important;
+    text-align: center !important;
+}
+
+.data-table td:first-child {
+    text-align: left !important;
+}
+.data-table input[type="number"] {
+    width: 46px !important;
+    max-width: 54px !important;
+    font-size: 1em !important;
+    padding: 2px 2px !important;
+    margin: 0 !important;
+}

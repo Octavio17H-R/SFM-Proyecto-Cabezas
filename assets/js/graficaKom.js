@@ -1,198 +1,234 @@
-// graficaKom.js - Adaptado para estructura y mini-gráficos de Kombiblatt
+(async function () {
+  'use strict';
 
-document.addEventListener("DOMContentLoaded", async () => {
-  const tabla = document.getElementById("cuerpoTabla");
-  const canvasProductividad = document.getElementById("miniGraficoProductividad").getContext("2d");
-  const canvasOEE = document.getElementById("miniGraficoOEE").getContext("2d");
-  const canvasVolumen = document.getElementById("miniGraficoVolumen").getContext("2d");
+  // --- Helpers ---
+  const today = new Date();
+  const dia = today.getDate();             // 5
+  const mes = today.toLocaleString('es-ES', { month: 'long' }); // "septiembre"
 
-  const metas = {
-    accidentes: 0,
-    volumen: { EA888: 1400, EA211: 1100 },
-    productividad: 90,
-    oee: 63,
-    calidad: 95
-  };
-  const modelos = { EA888: "BZ", EA211: "EA211" };
-
-  let chartProductividad = null;
-  let chartOEE = null;
-  let chartVolumen = null;
-
-  function calcularSemaforo(real, meta) {
-    if (real === null || isNaN(real)) return `<span class="semaforo rojo"></span>`;
-    if (real >= meta) return `<span class="semaforo verde"></span>`;
-    if (real >= meta * 0.9) return `<span class="semaforo amarillo"></span>`;
-    return `<span class="semaforo rojo"></span>`;
+  // Función para leer Excel como AOA
+  async function readExcel(path) {
+    const resp = await fetch(path);
+    const buffer = await resp.arrayBuffer();
+    const wb = XLSX.read(buffer, { type: 'array' });
+    return wb;
   }
 
-  async function leerArchivoXLSX(url, keyValue, area) {
-    try {
-      const response = await fetch(url);
-      if (!response.ok) return null;
-      const arrayBuffer = await response.arrayBuffer();
-      const workbook = XLSX.read(arrayBuffer, { type: "array" });
-      const sheet = workbook.Sheets[workbook.SheetNames[0]];
-      const json = XLSX.utils.sheet_to_json(sheet);
-      const fila = json.find(row =>
-        row.Producto === area || row.Area === area || row.Nombre === area || row.Modelo === area
-      );
-      return fila && fila[keyValue] !== undefined ? fila[keyValue] : null;
-    } catch {
-      return null;
-    }
+  // --- 1. Accidentes (día actual) ---
+  async function getAccidentesHoy() {
+    const wb = await readExcel('../assets/Archivos/Empleado/accidentabilidad.xlsx');
+    const sheet = wb.Sheets[wb.SheetNames[0]];
+    const rows = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: '' });
+    console.log(rows);
+
+
+    // Estructura: Día | Mes | Tipo | Area | Estatus | Calificación
+    const accidentes = rows.filter(r =>
+      parseInt(r[0], 10) === dia &&
+      String(r[1]).toLowerCase() === mes.toLowerCase()
+    );
+
+    document.getElementById('accidentes-hoy').innerText = accidentes.length;
   }
 
-  async function obtenerFilas() {
-    const segmentos = [
-      { clave: "volumen", archivo: "cumplimiento.xlsx", columna: "Volumen" },
-      { clave: "productividad", archivo: "productividad.xlsx", columna: "Productividad" },
-      { clave: "oee", archivo: "oee.xlsx", columna: "OEE" },
-      { clave: "accidentes", archivo: null, columna: null },
-      { clave: "calidad", archivo: null, columna: null },
-    ];
-    const areas = ["EA888", "EA211"];
-    let resultado = [];
-    for (let area of areas) {
-      let real = {};
-      for (let seg of segmentos) {
-        if (!seg.archivo) {
-          real[seg.clave] = null;
-        } else {
-          let valor = await leerArchivoXLSX(
-            `../assets/Archivos/Proceso/${seg.archivo}`,
-            seg.columna,
-            area
-          );
-          real[seg.clave] = valor !== undefined ? valor : null;
-        }
-      }
-      resultado.push({
-        area,
-        modelo: modelos[area],
-        real,
-        semaforo: {
-          accidentes: "",
-          volumen: calcularSemaforo(real.volumen, metas.volumen[area]),
-          productividad: calcularSemaforo(real.productividad, metas.productividad),
-          oee: calcularSemaforo(real.oee, metas.oee),
-          calidad: ""
-        }
-      });
-    }
-    return resultado;
-  }
+  // --- 2. Productividad (día actual, por turno) ---
+async function getProductividadHoyGrafica() {
+  const wb = await readExcel('../assets/Archivos/Proceso/productividad.xlsx');
+  const productos = ['EA888', 'EA211'];
 
-  function llenarTabla(filas) {
-    tabla.innerHTML = "";
-    filas.forEach(fila => {
-      tabla.insertAdjacentHTML(
-        "beforeend",
-        `<tr>
-          <td>Corazones ${fila.area}</td>
-          <td></td>
-          <td></td>
+  const datasets = [];
 
-          <td>${metas.volumen[fila.area]}</td>
-          <td>${fila.semaforo.volumen}</td>
-          <td>${fila.real.volumen ?? "N/A"}</td>
+  productos.forEach(sheet => {
+    if (!wb.SheetNames.includes(sheet)) return;
+    const rows = XLSX.utils.sheet_to_json(wb.Sheets[sheet], { header: 1, defval: '' });
+    const dataRows = rows.slice(1); // Ignorar encabezado
 
-          <td>${metas.productividad}</td>
-          <td>${fila.semaforo.productividad}</td>
-          <td>${fila.real.productividad ?? "N/A"}</td>
+    const row = dataRows.find(r => parseInt(r[0], 10) === dia);
+    if (!row) return;
 
-          <td>${metas.oee}%</td>
-          <td>${fila.semaforo.oee}</td>
-          <td>${fila.real.oee ?? "N/A"}</td>
-
-          <td>${fila.modelo}</td>
-          <td></td>
-          <td></td>
-
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>`
-      );
+    datasets.push({
+      label: sheet,
+      data: [row[1] ?? 0, row[2] ?? 0, row[3] ?? 0],
+      backgroundColor: sheet === 'EA888' ? 'rgba(54, 162, 235, 0.6)' : 'rgba(255, 99, 132, 0.6)',
+      borderColor: sheet === 'EA888' ? 'rgba(54, 162, 235, 1)' : 'rgba(255, 99, 132, 1)',
+      borderWidth: 1
     });
-  }
+  });
 
-  function renderMiniChart(ctx, label, data, color, meta) {
-    return new Chart(ctx, {
-      type: "bar",
-      data: {
-        labels: ["EA888", "EA211"],
-        datasets: [{
-          label: label,
-          data: data,
-          backgroundColor: color
-        }]
+  const ctx = document.getElementById('graficoProductividad').getContext('2d');
+
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['T1', 'T2', 'T3'],
+      datasets: datasets
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'top' },
+        title: {
+          display: true,
+          text: `Productividad del día ${dia} de ${mes.charAt(0).toUpperCase() + mes.slice(1)}`
+        }
       },
-      options: {
-        responsive: false,
-        plugins: {
-          legend: { display: false },
-          title: meta ? {
-            display: true,
-            text: `Meta: ${meta}`,
-            font: { size: 11 },
-            color: '#525252',
-            align: 'end'
-          } : false,
-          tooltip: {
-            enabled: true,
-            callbacks: {
-              label: function(ctx) { return ` ${ctx.parsed.y}`; }
-            }
-          }
-        },
-        scales: {
-          x: {
-            grid: { display: false },
-            ticks: { font: { size: 11 } },
-          },
-          y: {
-            grid: { display: false },
-            beginAtZero: true,
-            suggestedMax: label==='OEE' ? 100 : undefined,
-            ticks: { font: { size: 11 } },
-          }
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: { stepSize: 5 }
         }
       }
+    }
+  });
+}
+
+
+  // --- 3. Desecho (día actual, por turno) ---
+async function getDesechoHoyGrafica() {
+  const wb = await readExcel('../assets/Archivos/Calidad/Desecho.xlsx');
+  const productos = ['EA888', 'EA211'];
+
+  const datasets = [];
+
+  productos.forEach(sheet => {
+    if (!wb.SheetNames.includes(sheet)) return;
+    const rows = XLSX.utils.sheet_to_json(wb.Sheets[sheet], { header: 1, defval: '' });
+    const dataRows = rows.slice(1); // Ignorar encabezado
+
+    const row = dataRows.find(r => parseInt(r[0], 10) === dia);
+    if (!row) return;
+
+    datasets.push({
+      label: sheet,
+      data: [row[1] ?? 0, row[2] ?? 0, row[3] ?? 0],
+      backgroundColor: sheet === 'EA888' ? 'rgba(75, 192, 192, 0.6)' : 'rgba(255, 206, 86, 0.6)',
+      borderColor: sheet === 'EA888' ? 'rgba(75, 192, 192, 1)' : 'rgba(255, 206, 86, 1)',
+      borderWidth: 1
     });
+  });
+
+  const ctx = document.getElementById('graficoDesecho').getContext('2d');
+
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['T1', 'T2', 'T3'],
+      datasets: datasets
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'top' },
+        title: {
+          display: true,
+          text: `Desecho del día ${dia} de ${mes.charAt(0).toUpperCase() + mes.slice(1)}`
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: { stepSize: 5 }
+        }
+      }
+    }
+  });
+}
+// --- 4.stock (día actual, por turno) ---
+async function getStockSemana() {
+  const wb = await readExcel('../assets/Archivos/Proceso/stock.xlsx');
+  const sheet = wb.Sheets[wb.SheetNames[0]];
+  const rows = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: '' });
+
+  const productos = ['EA888 EVO', 'EA888 BZ', 'EA888 Serie', 'EA211'];
+
+  // Obtener índice del día actual (0 = Lunes, 6 = Domingo)
+  const today = new Date();
+  const diaSemana = today.getDay(); // 0 = Domingo, 1 = Lunes, ... 6 = Sábado
+  // Ajustamos para que 0=Domingo, 1=Lunes,... => Lunes=0, Domingo=6
+  const diaIndex = diaSemana === 0 ? 6 : diaSemana - 1;
+
+  productos.forEach((p, i) => {
+    const row = rows.find(r => String(r[0]).toLowerCase().includes(p.toLowerCase()));
+    if (!row) return;
+
+    const dias = row.slice(1, 8).map(v => v ?? '');
+
+    const fila = document.getElementById(`fila_stock_${i}`);
+    if (!fila) return;
+
+    // Limpiamos la fila
+    fila.innerHTML = `<td>${p}</td>`;
+
+    dias.forEach((d, idx) => {
+      const td = document.createElement('td');
+      td.innerText = d;
+
+      // Si es el día actual, ponemos fondo verde claro
+      if (idx === diaIndex) {
+        td.style.backgroundColor = '#d4edda'; // verde claro
+        td.style.fontWeight = '600';
+      }
+
+      fila.appendChild(td);
+    });
+  });
+}
+  // --- 5. OEE (mes actual) ---
+    async function getOeeMesTarjetas() {
+      const wb = await readExcel('../assets/Archivos/Proceso/oee.xlsx');
+      const sheet = wb.Sheets[wb.SheetNames[0]];
+      const rows = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: '' });
+
+      const today = new Date();
+      const mes = today.toLocaleString('es-ES', { month: 'long' }).trim().toLowerCase();
+
+      const rowEA211 = rows.find(r =>
+        r[0].toString().trim().toLowerCase() === mes && r[1].toString().trim() === 'EA211'
+      );
+      const rowEA888 = rows.find(r =>
+        r[0].toString().trim().toLowerCase() === mes && r[1].toString().trim() === 'EA888'
+      );
+
+      const oeeEA211 = rowEA211 ? parseFloat(rowEA211[5] ?? 0) : 0;
+      const oeeEA888 = rowEA888 ? parseFloat(rowEA888[5] ?? 0) : 0;
+
+      document.getElementById('oee_ea211').innerText = oeeEA211.toFixed(2) + '%';
+      document.getElementById('oee_ea888').innerText = oeeEA888.toFixed(2) + '%';
+    }
+
+
+  // --- 6. Dinero Gastado (año actual) ---
+    async function actualizarDineroGastado() {
+  try {
+    const response = await fetch('../assets/Archivos/Finanzas/fpk.xlsx');
+    const arrayBuffer = await response.arrayBuffer();
+    const data = new Uint8Array(arrayBuffer);
+    const workbook = XLSX.read(data, { type: 'array' });
+    const worksheet = workbook.Sheets[workbook.SheetNames[0]]; // primera hoja
+    const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+    jsonData.shift(); // quitar encabezado
+
+    let totalCosto2025 = 0;
+    for(let i=0; i<jsonData.length; i++){
+      totalCosto2025 += Number(jsonData[i][1] || 0);
+    }
+
+    const valorGastadoDiv = document.getElementById('valor-gastado');
+    if(valorGastadoDiv){
+      valorGastadoDiv.textContent = totalCosto2025.toLocaleString('en-US') + ' USD';
+    }
+
+  } catch (error) {
+    console.error("Error al cargar Excel de Finanzas:", error);
   }
+}
 
-  // Principal
-  const filas = await obtenerFilas();
-  llenarTabla(filas);
 
-  // Productividad
-  if (chartProductividad) chartProductividad.destroy();
-  chartProductividad = renderMiniChart(
-    canvasProductividad,
-    "Productividad",
-    filas.map(f=>Number(f.real.productividad) || 0),
-    ["#0068e1", "#0bb183"],
-    metas.productividad
-  );
-
-  // OEE
-  if (chartOEE) chartOEE.destroy();
-  chartOEE = renderMiniChart(
-    canvasOEE,
-    "OEE",
-    filas.map(f=>Number(f.real.oee) || 0),
-    ["#7755fa", "#e7c200"],
-    metas.oee
-  );
-
-  // Volumen: gráfico más reducido, al pie
-  if (chartVolumen) chartVolumen.destroy();
-  chartVolumen = renderMiniChart(
-    canvasVolumen,
-    "Volumen",
-    filas.map(f=>Number(f.real.volumen) || 0),
-    ["#22c55e", "#b8bc2c"],
-    metas.volumen.EA888 + " / " + metas.volumen.EA211
-  );
-});
+  // --- Ejecutar ---
+  await getAccidentesHoy();
+  await getProductividadHoyGrafica();
+  await getDesechoHoyGrafica();
+  await getStockSemana();
+  await getOeeMesTarjetas() ;
+  await actualizarDineroGastado() 
+})();

@@ -44,7 +44,7 @@
               </a>
             </li>
             <!-- EMPLEADO -->
-            <li class="menu-item active">
+            <li class="menu-item">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-user"></i>
                 <div data-i18n="Layouts">Empleado</div>
@@ -88,14 +88,14 @@
               </ul>
             </li>
             <!-- CALIDAD -->
-            <li class="menu-item">
+            <li class="menu-item open active">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-crown"></i>
                 <div data-i18n="Layouts">Calidad</div>
               </a>
               <ul class="menu-sub">
                 <li class="menu-item"><a href="1-auditoria.html" class="menu-link"><div data-i18n="Without menu">Auditoria</div></a></li>
-                <li class="menu-item"><a href="2-recla.html" class="menu-link"><div data-i18n="Without navbar">Reclamaciones</div></a></li>
+                <li class="menu-item active"><a href="2-recla.html" class="menu-link"><div data-i18n="Without navbar">Reclamaciones</div></a></li>
                 <li class="menu-item"><a href="3-desecho.html" class="menu-link"><div data-i18n="Container">Desecho/Retrabajo</div></a></li>
                 <li class="menu-item"><a href="4-proz.html" class="menu-link"><div data-i18n="Fluid">Prozessmonitor</div></a></li>
                 <li class="menu-item"><a href="7-plan de acciones.html" class="menu-link"><div data-i18n="Blank">Plan de Acciones</div></a></li>
@@ -159,82 +159,16 @@
           <div class="content-wrapper">
             <div class="container-xxl flex-grow-1 container-p-y">
               <div class="row g-4">
-                <!-- TARJETA EMPLEADO -->
+                <!-- contenedor -->
                 <div class="col-12">
                   <div class="card shadow border-primary rounded-3 main-dashboard-card" style="min-height: 640px;">
-                    <div class="card-body d-flex flex-column">
-                      <h5 class="text-primary text-center fw-bold mb-4" style="font-size: 24px;">EMPLEADO</h5>
-                      <div class="d-flex justify-content-center gap-5 flex-grow-1" style="gap: 60px !important;">
-                        <!-- Columna 1: KOMBIBLATT, AGENDA, INFORMACIÓN -->
-                        <div class="d-flex flex-column align-items-center gap-3" style="min-width: 240px; max-width: 260px;">
-                          <!-- KOMBIBLATT -->
-                          <div class="w-100 d-flex flex-column align-items-center">
-                            <a href="1-komiblatt.html" class="btn btn-outline-primary w-100 fw-bold mb-2">KOMBIBLATT</a>
-                            <div class="card border-primary" style="width: 240px; height: 240px; margin: 0 auto; display: flex; align-items: center; justify-content: center;">
-                              <div class="card-body text-center p-2" style="padding: 0 !important; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
-                                <div class="outer-boxG" style="width: 200px; height: 200px; margin: 0 auto; display: flex; align-items: center; justify-content: center; font-size: 3rem;">1</div>
-                              </div>
-                            </div>
-                          </div>
-                          <!-- AGENDA -->
-                          <div class="w-100">
-                            <a href="2-agenda.html" class="btn btn-outline-primary w-100 fw-bold mb-2">AGENDA</a>
-                            <div class="card border-primary" style="width: 140px;">
-                              <div class="card-body text-center d-flex justify-content-center align-items-center" style="height: 100px;">
-                                <div class="outer-box" style="margin: 0 auto;">2</div>
-                              </div>
-                            </div>
-                          </div>
-                          <!-- INFORMACIÓN -->
-                          <div class="w-100">
-                            <a href="3-cascada.html" class="btn btn-outline-primary w-100 fw-bold mb-2">INFORMACIÓN</a>
-                            <div class="card border-primary" style="width: 140px;">
-                              <div class="card-body text-center d-flex justify-content-center align-items-center" style="height: 100px;">
-                                <div class="outer-box" style="margin: 0 auto;">3</div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <!-- Columna 2: ACCIDENTABILIDAD -->
-                        <div class="d-flex flex-column align-items-center gap-3" style="min-width: 220px; max-width: 240px;">
-                          <!-- ACCIDENTABILIDAD -->
-                          <div class="w-100">
-                            <a href="4-accident.html" class="btn btn-outline-primary w-100 fw-bold mb-2">ACCIDENTABILIDAD</a>
-                            <div class="card border-primary" style="width: 220px;">
-                              <div class="card-body d-grid gap-2" style="grid-template-columns: repeat(2, 1fr); justify-items: center;">
-                                <div class="outer-box"><div class="inner-box">4</div></div>
-                                <div class="outer-box"><div class="inner-box">4</div></div>
-                                <div class="outer-box"><div class="inner-box">4</div></div>
-                                <div class="outer-box"><div class="inner-box">4</div></div>
-                                <div></div>
-                                <div class="outer-box"><div class="inner-box">4</div></div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <!-- Columna 3: STIBA, ERGONOMIA, PLAN DE ACCIONES -->
-                        <div class="d-flex flex-column align-items-center gap-3" style="min-width: 140px; max-width: 180px;">
-                          <!-- ERGONOMIA -->
-                          <div class="w-100">
-                            <a href="6-ergonomia.html" class="btn btn-outline-primary w-100 fw-bold mb-2">ERGONOMIA</a>
-                            <div class="card border-primary">
-                              <div class="card-body text-center">
-                                <div class="outer-box">5</div>
-                              </div>
-                            </div>
-                          </div>
-                          <!-- PLAN DE ACCIONES -->
-                          <div class="w-100">
-                            <a href="7-plan de acciones.html" class="btn btn-outline-primary w-100 fw-bold mb-2">PLAN DE ACCIONES</a>
-                            <div class="card border-primary">
-                              <div class="card-body text-center">
-                                <div class="outer-box">6</div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                    <!-- CONTENIDO ----------------------------------------------------->
+                    <div class="text-center mb-8">
+                      <span class="badge bg-primary fs-8"style="font-size:2.5rem; margin-top: 2rem; font-family: 'Public Sans', sans-serif;">
+                        Reclamaciones
+                      </span>
                     </div>
+                    <img src="../assets/Archivos/Calidad/reclamaciones.jpg"style="max-width: 900px; height: auto;display: block; margin: 0 auto;">
                   </div>
                 </div>
               </div>

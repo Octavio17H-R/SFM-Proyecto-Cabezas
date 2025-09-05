@@ -7,7 +7,7 @@
 * Created by: OCTAVIO.HER1707@GMAIL.COM
 * License: You must have a valid license purchased in order to legally use the theme for your project.
 =========================================================
- -->
+  -->
 <!-- beautify ignore:start -->
 <html
   lang="en"
@@ -92,7 +92,7 @@
                 <div data-i18n="Analytics">Dashboard</div>
               </a>
             </li>
-           <!-- EMPLEADO -->
+            <!-- EMPLEADO -->
             <li class="menu-item active open">
               <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-user"></i>
@@ -218,12 +218,12 @@
 
               <ul class="menu-sub">
                 <li class="menu-item">
-                  <a href="1-komiblatt.html" class="menu-link">
+                  <a href="1-auditoria.html"menu-link">
                     <div data-i18n="Without menu">Auditoria</div>
                   </a>
                 </li>
                 <li class="menu-item">
-                  <a href="2-agenda.html" class="menu-link">
+                  <a href="2-recla.html" class="menu-link">
                     <div data-i18n="Without navbar">Reclamaciones</div>
                   </a>
                 </li>
@@ -233,7 +233,7 @@
                   </a>
                 </li>
                 <li class="menu-item">
-                  <a href="layouts-fluid.html" class="menu-link">
+                  <a href="4-proz.html" class="menu-link">
                     <div data-i18n="Fluid">Prozessmonitor</div>
                   </a>
                 </li>
@@ -355,82 +355,114 @@
 
           <!-- / Navbar -->
 
-          <!-- Content wrapper -->
-          <div class="content-wrapper">
-            <!-- Content -->
 
-            <div class="container-xxl flex-grow-1 container-p-y">
-              <div class="row justify-content-center">
-                <div class="col-12">
-                  <div class="card shadow border-primary rounded-3 main-dashboard-card" style="min-height: 640px;">
-                  <div class="card card-body">
-                    <!-- TÍTULO SEPARADO -->
-                    <div class="d-block w-100 text-center py-2 mb-4" style="font-size:2rem;font-weight:600;letter-spacing:.04em;background:#f6f9ff;border:1.5px solid #1976d2;border-radius:10px;color:#1976d2;box-shadow:0 2px 8px #1976d22e;">
+            <!-- Content -->
+              <div class="content-wrapper">
+                <div class="container-xxl flex-grow-1 container-p-y">
+
+                  <!-- TÍTULO -->
+                  <div class="d-block w-100 text-center py-2 mb-4"
+                    style="font-size:2rem;font-weight:600;letter-spacing:.04em;background:#f6f9ff;
+                          border:1.5px;border-radius:10px;color:#1976d2;box-shadow:0 2px 8px #1976d22e;">
                     KOMIBLATT
+                  </div>
+
+                  <div class="row g-4">
+                  <div class="row g-4">
+                    <!-- Columna 1: Accidentes y Dinero Gastado -->
+                    <div class="col-12 col-md-4 d-flex flex-column gap-4">
+                      <!-- Accidentes -->
+                      <div class="card text-center border-danger shadow-sm">
+                        <div class="card-body">
+                          <h5 class="card-title text-danger">🚑 Accidentes</h5>
+                          <div id="accidentes-hoy" class="display-4 fw-bold text-danger">0</div>
+                        </div>
+                      </div>
+
+                      <!-- Dinero Gastado -->
+                      <div class="card text-center border-warning shadow-sm">
+                        <div class="card-body">
+                          <h5 class="card-title text-warning">💰 Dinero Gastado</h5>
+                          <div id="valor-gastado" class="display-4 fw-bold text-warning">0 USD</div>
+                        </div>
+                      </div>
                     </div>
-                    <div class="card-body">
-                      <!-- TABLA KOMIBLATT -->
-                      <div class="mb-4 table-responsive" style="max-width: 98vw; overflow-x: auto;">
-                        <table id="tablaIndicadores" class="table table-bordered table-striped table-hover text-center align-middle shadow-sm table-sm mb-0" style="font-size:0.95rem; min-width: 900px; max-width: 100%; width: 100%;">
-                          <thead class="table-primary">
-                            <tr>
-                              <th class="align-middle">Áreas</th>
-                              <th class="align-middle" colspan="2">Accidentes</th>
-                              <th class="align-middle" colspan="3">Volumen</th>
-                              <th class="align-middle" colspan="3">Productividad</th>
-                              <th class="align-middle" colspan="2">OEE (%)</th>
-                              <th class="align-middle" colspan="3">Alcance</th>
-                              <th class="align-middle" colspan="3">Calidad</th>
-                            </tr>
-                            <tr class="table-light">
-                              <th></th>
-                              <th>Meta</th><th>Real</th>
-                              <th>Meta</th><th>Status</th><th>Real</th>
-                              <th>Meta</th><th>Status</th><th>Real</th>
-                              <th>Status</th><th>Real</th>
-                              <th>Modelo</th><th>Status</th><th>Real</th>
-                              <th>Meta</th><th>Status</th><th>Real</th>
-                            </tr>
-                          </thead>
-                          <tbody id="cuerpoTabla"></tbody>
-                        </table>
-                      </div>
-                      <!-- MINI-RESÚMENES PRODUCTIVIDAD Y OEE -->
-                      <div class="row g-3 mb-4 justify-content-center">
-                        <div class="col-12 col-md-6">
-                          <div class="card mini-chart-card">
-                            <div class="card-body py-2">
-                              <p class="fw-bold mb-2 text-center">Productividad</p>
-                              <canvas id="miniGraficoProductividad" width="180" height="90" style="max-width:100%;"></canvas>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="col-12 col-md-6">
-                          <div class="card mini-chart-card">
-                            <div class="card-body py-2">
-                              <p class="fw-bold mb-2 text-center">OEE</p>
-                              <canvas id="miniGraficoOEE" width="180" height="90" style="max-width:100%;"></canvas>
-                            </div>
-                          </div>
+
+                    <!-- Columna 2: Productividad -->
+                    <div class="col-12 col-md-4">
+                      <div class="card shadow-sm">
+                        <div class="card-body">
+                          <h5 class="card-title text-primary text-center">⚙️ Productividad</h5>
+                          <canvas id="graficoProductividad" height="150"></canvas>
                         </div>
                       </div>
-                      <!-- MINI-GRAFICO DE VOLUMEN ABAJO -->
-                      <div class="row mt-4 justify-content-center">
-                        <div class="col-8 col-md-4">
-                          <div class="card mini-chart-card">
-                            <div class="card-body py-2">
-                              <p class="fw-bold mb-2 text-center">Volumen</p>
-                              <canvas id="miniGraficoVolumen" width="120" height="70" style="max-width:100%;"></canvas>
-                            </div>
-                          </div>
+                    </div>
+
+                    <!-- Columna 3: Desecho -->
+                    <div class="col-12 col-md-4">
+                      <div class="card shadow-sm">
+                        <div class="card-body">
+                          <h5 class="card-title text-success text-center">♻️ Desecho</h5>
+                          <canvas id="graficoDesecho" height="150"></canvas>
                         </div>
                       </div>
                     </div>
                   </div>
+                    <!-- Stock -->
+                    <div class="col-12">
+                      <div class="card shadow-sm">
+                        <div class="card-body">
+                          <h5 class="card-title text-center">📦 Stock</h5>
+                          <div class="table-responsive">
+                            <table class="table table-bordered text-center table-sm">
+                              <thead class="table-light">
+                                <tr>
+                                  <th>Producto</th>
+                                  <th>Lun</th>
+                                  <th>Mar</th>
+                                  <th>Mié</th>
+                                  <th>Jue</th>
+                                  <th>Vie</th>
+                                  <th>Sáb</th>
+                                  <th>Dom</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr id="fila_stock_0"><td>EA888 EVO</td></tr>
+                                <tr id="fila_stock_1"><td>EA888 BZ</td></tr>
+                                <tr id="fila_stock_2"><td>EA888 Serie</td></tr>
+                                <tr id="fila_stock_3"><td>EA211</td></tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+
+                    <!-- OEE -->
+                    <!-- OEE tarjetas -->
+                    <div class="col-12 col-md-6">
+                      <div class="card text-center shadow-sm border-primary">
+                        <div class="card-body">
+                          <h5 class="card-title text-primary">📈 OEE EA211</h5>
+                          <div id="oee_ea211" class="display-4 fw-bold text-primary">0%</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-12 col-md-6">
+                      <div class="card text-center shadow-sm border-danger">
+                        <div class="card-body">
+                          <h5 class="card-title text-primary">📈 OEE EA888</h5>
+                          <div id="oee_ea888" class="display-4 fw-bold text-primary">0%</div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
+
             <!-- / Content -->
             <!-- Footer -->
             <footer class="content-footer footer bg-footer-theme">
@@ -464,8 +496,7 @@
             <!-- / Footer -->
 
             <div class="content-backdrop fade"></div>
-          </div>
-          <!-- Content wrapper -->
+
         </div>
         <!-- / Layout page -->
       </div>
@@ -508,6 +539,6 @@
 
     <!-- Tu script externo -->
     <script src="../assets/js/graficaKom.js"></script>
-
+    <script src="../assets/js/busqueda.js"></script>
   </body>
 </html>
